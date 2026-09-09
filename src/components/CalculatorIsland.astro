@@ -1,0 +1,270 @@
+---
+import Calculator from './Calculator.astro';
+---
+
+<Calculator />
+
+<script>
+	import {
+		FORMULAS,
+		type CreatinineUnit,
+		type FormulaId,
+		type Sex,
+		type GfrResult,
+	} from '../lib/gfr';
+
+	const formulaTabs = document.querySelectorAll<HTMLButtonElement>('[data-formula-tab]');
+	const panel = document.getElementById('calculator-panel');
+	const description = document.getElementById('formula-description');
+	const weightField = document.querySelector<HTMLElement>('[data-weight-field]');
+	const weightInput = document.getElementById('weight') as HTMLInputElement | null;
+	const form = document.getElementById('gfr-form') as HTMLFormElement | null;
+	const resultRegion = document.getElementById('result-region');
+	const unitToggles = document.querySelectorAll<HTMLButtonElement>('[data-unit-toggle]');
+	const sexToggles = document.querySelectorAll<HTMLButtonElement>('[data-sex-toggle]');
+	const creatinineInput = document.getElementById('creatinine') as HTMLInputElement | null;
+	const creatinineError = document.getElementById('creatinine-error');
+	const ageInput = document.getElementById('age') as HTMLInputElement | null;
+	const ageError = document.getElementById('age-error');
+	const weightError = document.getElementById('weight-error');
+
+	let activeFormula: FormulaId = 'ckd-epi-2021';
+	let activeUnit: CreatinineUnit = 'mg/dL';
+	let activeSex: Sex = 'female';
+
+	function setActiveTab(id: FormulaId) {
+		activeFormula = id;
+		formulaTabs.forEach((tab) => {
+			const isActive = tab.dataset.formulaTab === id;
+			tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+			tab.tabIndex = isActive ? 0 : -1;
+			tab.classList.toggle('text-ink', isActive);
+			tab.classList.toggle('border-ink', isActive);
+			tab.classList.toggle('text-mute', !isActive);
+			tab.classList.toggle('border-transparent', !isActive);
+		});
+		if (description) description.textContent = FORMULAS[id].description;
+		if (panel) panel.setAttribute('aria-labelledby', `tab-${id}`);
+
+		const requiresWeight = FORMULAS[id].requiresWeight;
+		weightField?.classList.toggle('hidden', !requiresWeight);
+		if (weightInput) weightInput.required = requiresWeight;
+
+		// Clear previous results when switching formulas to avoid showing stale math.
+		if (resultRegion) resultRegion.innerHTML = '';
+	}
+
+	formulaTabs.forEach((tab) => {
+		tab.addEventListener('click', () => {
+			const id = tab.dataset.formulaTab as FormulaId;
+			setActiveTab(id);
+		});
+	});
+
+	// Roving tab focus with arrow keys per WAI-ARIA tabs pattern.
+	const tabList = document.querySelector('[role="tablist"]');
+	tabList?.addEventListener('keydown', (e) => {
+		const keyEvent = e as KeyboardEvent;
+		const tabs = Array.from(formulaTabs);
+		const currentIndex = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+		let nextIndex: number | null = null;
+		if (keyEvent.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length;
+		if (keyEvent.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+		if (nextIndex !== null) {
+			keyEvent.preventDefault();
+			const nextTab = tabs[nextIndex];
+			const id = nextTab.dataset.formulaTab as FormulaId;
+			setActiveTab(id);
+			nextTab.focus();
+		}
+	});
+
+	function setUnit(unit: CreatinineUnit) {
+		activeUnit = unit;
+		unitToggles.forEach((btn) => {
+			const isActive = btn.dataset.unitToggle === unit;
+			btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
+			btn.classList.toggle('text-ink', isActive);
+			btn.classList.toggle('text-mute', !isActive);
+		});
+		if (creatinineInput) {
+			creatinineInput.placeholder = unit === 'mg/dL' ? '1.00' : '88.4';
+		}
+	}
+
+	unitToggles.forEach((btn) => {
+		btn.addEventListener('click', () => setUnit(btn.dataset.unitToggle as CreatinineUnit));
+	});
+
+	function makeRadioGroupKeyable(buttons: NodeListOf<HTMLButtonElement>, onSelect: (value: string) => void) {
+		buttons.forEach((btn, index) => {
+			btn.addEventListener('keydown', (e) => {
+				const keyEvent = e as KeyboardEvent;
+				let nextIndex: number | null = null;
+				if (keyEvent.key === 'ArrowRight' || keyEvent.key === 'ArrowDown') nextIndex = (index + 1) % buttons.length;
+				if (keyEvent.key === 'ArrowLeft' || keyEvent.key === 'ArrowUp') nextIndex = (index - 1 + buttons.length) % buttons.length;
+				if (nextIndex !== null) {
+					keyEvent.preventDefault();
+					const nextBtn = buttons[nextIndex];
+					nextBtn.focus();
+					onSelect(nextBtn.dataset.unitToggle ?? nextBtn.dataset.sexToggle ?? '');
+				}
+			});
+		});
+	}
+
+	makeRadioGroupKeyable(unitToggles, (value) => setUnit(value as CreatinineUnit));
+
+	function setSex(sex: Sex) {
+		activeSex = sex;
+		sexToggles.forEach((btn) => {
+			const isActive = btn.dataset.sexToggle === sex;
+			btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
+			btn.classList.toggle('text-ink', isActive);
+			btn.classList.toggle('text-mute', !isActive);
+		});
+	}
+
+	sexToggles.forEach((btn) => {
+		btn.addEventListener('click', () => setSex(btn.dataset.sexToggle as Sex));
+	});
+
+	makeRadioGroupKeyable(sexToggles, (value) => setSex(value as Sex));
+
+	function clearErrors() {
+		if (creatinineError) creatinineError.textContent = '';
+		if (ageError) ageError.textContent = '';
+		if (weightError) weightError.textContent = '';
+	}
+
+	function stageBadgeClasses(stage: string): string {
+		const map: Record<string, string> = {
+			G1: 'bg-link-soft text-link-deep',
+			G2: 'bg-link-soft text-link-deep',
+			G3a: 'bg-warning-soft text-warning-deep',
+			G3b: 'bg-warning-soft text-warning-deep',
+			G4: 'bg-[#ffe0cc] text-[#ab3a0a] dark:bg-[#3d200a] dark:text-[#ffb37d]',
+			G5: 'bg-[#ffd6d6] text-error-deep dark:bg-[#3d0f0f]',
+		};
+		return map[stage] ?? 'bg-hairline-soft text-body';
+	}
+
+	function renderResult(result: GfrResult) {
+		if (!resultRegion) return;
+
+		const stepsHtml = result.steps
+			.map(
+				(step) => `
+			<li class="border-b border-hairline-soft py-2.5 last:border-0">
+				<p class="text-xs font-medium uppercase tracking-wide text-mute">${escapeHtml(step.label)}</p>
+				<p class="mt-1 font-mono text-sm text-ink break-words">${escapeHtml(step.expression)}</p>
+				${step.result ? `<p class="mt-1 font-mono text-sm font-semibold text-ink">= ${escapeHtml(step.result)}</p>` : ''}
+			</li>
+		`,
+			)
+			.join('');
+
+		const notesHtml = result.notes?.length
+			? `<div class="mt-4 space-y-2 rounded-sm bg-hairline-soft p-3 text-xs text-body">
+					${result.notes.map((n) => `<p>${escapeHtml(n)}</p>`).join('')}
+				</div>`
+			: '';
+
+		resultRegion.innerHTML = `
+			<div class="mt-6 rounded-md border border-hairline bg-canvas p-4 sm:p-5">
+				<div class="flex flex-wrap items-baseline justify-between gap-3">
+					<div>
+						<p class="text-xs font-medium uppercase tracking-wide text-mute font-mono">${escapeHtml(result.formulaName)}</p>
+						<p class="mt-1 text-3xl font-semibold tracking-tight text-ink [font-variant-numeric:tabular-nums]">
+							${result.egfr} <span class="text-base font-normal text-body">${escapeHtml(result.unit)}</span>
+						</p>
+					</div>
+					<span class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium ${stageBadgeClasses(result.stage.stage)}">
+						${escapeHtml(result.stage.label)} &middot; ${escapeHtml(result.stage.range)}
+					</span>
+				</div>
+				<p class="mt-2 text-sm text-body">${escapeHtml(result.stage.description)}</p>
+				${notesHtml}
+
+				<details class="mt-5 group" open>
+					<summary class="cursor-pointer select-none text-sm font-medium text-ink [&::-webkit-details-marker]:hidden">
+						<span class="inline-flex items-center gap-1.5">
+							Show step-by-step working
+							<svg class="h-3.5 w-3.5 transition-transform group-open:rotate-180" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+						</span>
+					</summary>
+					<ol class="mt-3 divide-y divide-hairline-soft">
+						${stepsHtml}
+					</ol>
+				</details>
+			</div>
+		`;
+
+		resultRegion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+	}
+
+	function escapeHtml(input: string): string {
+		const div = document.createElement('div');
+		div.textContent = input;
+		return div.innerHTML;
+	}
+
+	form?.addEventListener('submit', (e) => {
+		e.preventDefault();
+		clearErrors();
+
+		const creatinineRaw = creatinineInput?.value ?? '';
+		const ageRaw = ageInput?.value ?? '';
+		const weightRaw = weightInput?.value ?? '';
+
+		const creatinine = Number(creatinineRaw);
+		const age = Number(ageRaw);
+		const weightKg = weightRaw ? Number(weightRaw) : undefined;
+
+		let hasError = false;
+
+		if (!creatinineRaw || !Number.isFinite(creatinine) || creatinine <= 0) {
+			if (creatinineError) creatinineError.textContent = 'Enter a creatinine value greater than 0.';
+			hasError = true;
+		}
+
+		if (!ageRaw || !Number.isFinite(age) || age <= 0 || age > 120) {
+			if (ageError) ageError.textContent = 'Enter an age between 1 and 120.';
+			hasError = true;
+		}
+
+		if (FORMULAS[activeFormula].requiresWeight) {
+			if (!weightRaw || !Number.isFinite(weightKg) || (weightKg ?? 0) <= 0) {
+				if (weightError) weightError.textContent = 'Cockcroft-Gault requires a body weight greater than 0.';
+				hasError = true;
+			}
+		}
+
+		if (hasError) {
+			if (resultRegion) resultRegion.innerHTML = '';
+			return;
+		}
+
+		try {
+			const result = FORMULAS[activeFormula].calculate({
+				creatinine,
+				creatinineUnit: activeUnit,
+				age,
+				sex: activeSex,
+				weightKg,
+			});
+			renderResult(result);
+		} catch (err) {
+			if (resultRegion) {
+				resultRegion.innerHTML = `<p class="mt-4 text-sm text-error">${escapeHtml(
+					err instanceof Error ? err.message : 'Something went wrong calculating your result.',
+				)}</p>`;
+			}
+		}
+	});
+
+	// Initialize UI state.
+	setActiveTab('ckd-epi-2021');
+	setUnit('mg/dL');
+	setSex('female');
+</script>

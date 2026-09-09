@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+	title="Page Not Found — GFR Calculator"
+	description="The page you're looking for doesn't exist. Return to the GFR Calculator homepage to estimate your kidney function."
+	noindex
+>
+	<section class="container-page py-20 sm:py-28">
+		<div class="mx-auto max-w-xl text-center">
+			<p class="font-mono text-xs font-medium uppercase tracking-wide text-mute">Error 404</p>
+			<h1 class="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">Page not found</h1>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				The page you're looking for doesn't exist, may have moved, or the link may be broken.
+			</p>
+
+			<div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+				<a
+					href="/"
+					class="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition-colors hover:opacity-90"
+				>
+					Go to the GFR Calculator
+				</a>
+				<a
+					href="/contact"
+					class="rounded-full border border-hairline px-5 py-2.5 text-sm font-medium text-body transition-colors hover:text-ink"
+				>
+					Contact us
+				</a>
+			</div>
+
+			<p class="mt-10 text-sm text-faint">
+				Looking for something specific? Try
+				<a href="/methodology" class="text-link hover:text-link-deep">Methodology</a>,
+				<a href="/about" class="text-link hover:text-link-deep">About</a>, or
+				<a href="/privacy-policy" class="text-link hover:text-link-deep">Privacy Policy</a>.
+			</p>
+		</div>
+	</section>
+</Layout>

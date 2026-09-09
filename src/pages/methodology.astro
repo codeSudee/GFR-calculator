@@ -1,0 +1,169 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
+---
+
+<Layout
+	title="GFR Calculator Formula & Methodology — CKD-EPI, MDRD, Cockcroft-Gault"
+	description="How this GFR calculator formula works: CKD-EPI, MDRD, and Cockcroft-Gault equation sources, unit conversion approach, and the peer-reviewed research on online eGFR calculator accuracy that shaped its design."
+>
+	<article class="container-page py-14 sm:py-20">
+		<div class="mx-auto max-w-2xl">
+			<p class="font-mono text-xs font-medium uppercase tracking-wide text-mute">Methodology</p>
+			<h1 class="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+				How this calculator works
+			</h1>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				This page documents the formulas, unit-conversion approach, and design decisions behind
+				this calculator, and the research that motivated them.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">
+				Why accuracy needed to be the starting point
+			</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				In 2020, Seiberth, Terstegen, Strobach, and Czock published
+				<a
+					href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7481157/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="text-link hover:text-link-deep"
+				>
+					&ldquo;Accuracy of freely available online GFR calculators using the CKD-EPI equation&rdquo;
+				</a>
+				in the <em>European Journal of Clinical Pharmacology</em>. The authors tested 47 freely
+				available online CKD-EPI calculators against five hand-verified reference cases and found:
+			</p>
+			<ul class="mt-4 space-y-2 text-base leading-relaxed text-body">
+				<li>Only 36 of 47 calculators (76.6%) produced accurate results for every reference case.</li>
+				<li>
+					8 of 47 (17.0%) were considered <strong>faulty</strong> — errors that could lead to
+					inappropriate clinical decisions.
+				</li>
+				<li>
+					The errors broke down as: 4 calculators mishandling ethnicity/race, 2 miscalculating the
+					conversion from indexed eGFR (mL/min/1.73m&sup2;) to non-indexed eGFR (mL/min), 1
+					converting serum creatinine units (mg/dL &harr; &micro;mol/L) incorrectly, and 1
+					mislabeling the eGFR unit displayed to the user.
+				</li>
+				<li>Errors ranged from 59% to 147% of the correct value — large enough to change a clinical decision.</li>
+				<li>Only 7 of 47 (14.9%) calculators even offered eGFR unit conversion in the first place.</li>
+			</ul>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				That paper is the direct reason this site centralizes creatinine unit conversion into a
+				single, tested function (<code class="rounded-sm bg-hairline-soft px-1.5 py-0.5 font-mono text-sm">convertCreatinine()</code>),
+				does not implement a race-based eGFR adjustment for any formula, states clearly which units
+				each formula returns (mL/min/1.73m&sup2; for the three eGFR equations vs. mL/min for
+				Cockcroft-Gault), and shows every intermediate calculation step so a result can be checked
+				by hand.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Formulas used</h2>
+
+			<div class="mt-6 space-y-8">
+				<div>
+					<h3 class="text-base font-semibold text-ink">CKD-EPI 2021 (race-free)</h3>
+					<p class="mt-2 text-sm leading-relaxed text-body">
+						The current standard recommended by the National Kidney Foundation (NKF) and American
+						Society of Nephrology (ASN) for eGFR reporting in the United States. Removed the race
+						coefficient present in the 2009 equation after the NKF/ASN Task Force found it
+						systematically overestimated kidney function in Black patients.
+					</p>
+					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR = 142 &times; min(Scr/&kappa;, 1)&sup1; &times; max(Scr/&kappa;, 1)&#8315;&sup9;&sup9;&sup9;&sup9;&sup9;&sup9;&#8309;&#8309;&#8309;&#8309;&#8309;&#8309;&#8309; &times; 0.9938&#7488;&#7473;&#7468; &times; 1.012 [if female]
+&kappa; = 0.7 (female) / 0.9 (male)
+&alpha; = -0.241 (female) / -0.302 (male)</pre>
+					<p class="mt-2 text-xs text-faint">Source: Inker LA, et al. N Engl J Med. 2021;385:1737-1749.</p>
+				</div>
+
+				<div>
+					<h3 class="text-base font-semibold text-ink">CKD-EPI 2009 (classic)</h3>
+					<p class="mt-2 text-sm leading-relaxed text-body">
+						The predecessor to the 2021 equation, still referenced by some older lab reports. The
+						original version included a &times;1.159 coefficient for patients identified as Black.
+						This site omits that coefficient consistently with the race-free approach used across
+						every formula here — see the note below each result on the calculator.
+					</p>
+					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR = 141 &times; min(Scr/&kappa;, 1)&sup1; &times; max(Scr/&kappa;, 1)&#8315;&sup1;&#8228;&sup2;&sup0;&sup9; &times; 0.993&#7488;&#7473;&#7468; &times; 1.018 [if female]
+&kappa; = 0.7 (female) / 0.9 (male)
+&alpha; = -0.329 (female) / -0.411 (male)</pre>
+					<p class="mt-2 text-xs text-faint">Source: Levey AS, et al. Ann Intern Med. 2009;150:604-612.</p>
+				</div>
+
+				<div>
+					<h3 class="text-base font-semibold text-ink">MDRD (4-variable)</h3>
+					<p class="mt-2 text-sm leading-relaxed text-body">
+						An older equation, still cited on some lab reports, that tends to underestimate GFR
+						above roughly 60 mL/min/1.73m&sup2;. As with CKD-EPI 2009, this site omits the
+						original &times;1.212 Black race coefficient.
+					</p>
+					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR = 175 &times; Scr&#8315;&sup1;&#8228;&sup1;&sup5;&#8308; &times; Age&#8315;&sup0;&#8228;&sup2;&sup0;&sup3; &times; 0.742 [if female]</pre>
+					<p class="mt-2 text-xs text-faint">Source: Levey AS, et al. Ann Intern Med. 2006;145:247-254.</p>
+				</div>
+
+				<div>
+					<h3 class="text-base font-semibold text-ink">Cockcroft-Gault</h3>
+					<p class="mt-2 text-sm leading-relaxed text-body">
+						Estimates creatinine clearance in mL/min — not normalized to body surface area, and
+						not directly comparable to the eGFR values above. Requires body weight. Commonly used
+						for drug-dosing calculations rather than general kidney function screening.
+					</p>
+					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">CrCl (mL/min) = [(140 - Age) &times; Weight(kg)] / (72 &times; Scr) &times; 0.85 [if female]</pre>
+					<p class="mt-2 text-xs text-faint">Source: Cockcroft DW, Gault MH. Nephron. 1976;16:31-41.</p>
+				</div>
+			</div>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Unit conversion</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Serum creatinine can be reported in mg/dL (common in the US) or &micro;mol/L (common
+				elsewhere). This site uses the standard conversion factor:
+			</p>
+			<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">1 mg/dL &asymp; 88.4 &micro;mol/L</pre>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				All formulas above are defined in terms of mg/dL, so any &micro;mol/L input is converted to
+				mg/dL first, in a single shared function, before any formula runs. This conversion step is
+				shown explicitly in every result&rsquo;s step-by-step working.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">CKD stage classification</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Results are classified into KDIGO CKD stages based on eGFR in mL/min/1.73m&sup2;:
+			</p>
+			<div class="mt-4 overflow-x-auto rounded-md border border-hairline">
+				<table class="w-full text-left text-sm">
+					<thead>
+						<tr class="border-b border-hairline bg-hairline-soft">
+							<th class="px-4 py-2.5 font-medium text-ink">Stage</th>
+							<th class="px-4 py-2.5 font-medium text-ink">eGFR (mL/min/1.73m&sup2;)</th>
+							<th class="px-4 py-2.5 font-medium text-ink">Description</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-hairline">
+						<tr><td class="px-4 py-2.5 font-medium text-ink">G1</td><td class="px-4 py-2.5 text-body">&ge; 90</td><td class="px-4 py-2.5 text-body">Normal or high kidney function</td></tr>
+						<tr><td class="px-4 py-2.5 font-medium text-ink">G2</td><td class="px-4 py-2.5 text-body">60&ndash;89</td><td class="px-4 py-2.5 text-body">Mildly decreased kidney function</td></tr>
+						<tr><td class="px-4 py-2.5 font-medium text-ink">G3a</td><td class="px-4 py-2.5 text-body">45&ndash;59</td><td class="px-4 py-2.5 text-body">Mildly to moderately decreased</td></tr>
+						<tr><td class="px-4 py-2.5 font-medium text-ink">G3b</td><td class="px-4 py-2.5 text-body">30&ndash;44</td><td class="px-4 py-2.5 text-body">Moderately to severely decreased</td></tr>
+						<tr><td class="px-4 py-2.5 font-medium text-ink">G4</td><td class="px-4 py-2.5 text-body">15&ndash;29</td><td class="px-4 py-2.5 text-body">Severely decreased kidney function</td></tr>
+						<tr><td class="px-4 py-2.5 font-medium text-ink">G5</td><td class="px-4 py-2.5 text-body">&lt; 15</td><td class="px-4 py-2.5 text-body">Kidney failure</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				A CKD diagnosis requires a reduced eGFR (or other markers of kidney damage, such as
+				albuminuria) to persist for three months or more — a single calculation here is not
+				sufficient to diagnose CKD on its own.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Testing</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				The calculation engine behind this site has an automated test suite covering unit
+				conversion in both directions, CKD stage boundary conditions, and each formula against
+				independently hand-verified reference values, so that regressions are caught before they
+				reach a result on this page.
+			</p>
+
+			<div class="mt-12">
+				<MedicalDisclaimer />
+			</div>
+		</div>
+	</article>
+</Layout>

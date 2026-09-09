@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+/* Manual dark mode: toggled by adding/removing `.dark` on <html> (see ThemeToggle script). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Colors — Geist-inspired ink/canvas system */
+  --color-ink: #171717;
+  --color-body: #4d4d4d;
+  --color-mute: #8f8f8f;
+  --color-faint: #a1a1a1;
+  --color-hairline: #ebebeb;
+  --color-hairline-soft: #f2f2f2;
+  --color-canvas: #fafafa;
+  --color-canvas-elevated: #ffffff;
+  --color-link: #0070f3;
+  --color-link-deep: #0761d1;
+  --color-link-soft: #d3e5ff;
+  --color-error: #ee0000;
+  --color-error-deep: #c50000;
+  --color-warning: #f5a623;
+  --color-warning-soft: #ffefcf;
+  --color-warning-deep: #ab570a;
+  --color-violet: #7928ca;
+  --color-cyan: #50e3c2;
+  --color-pink: #ff0080;
+  --color-magenta: #eb367f;
+  --color-success: #0070f3;
+  --color-success-soft: #d3e5ff;
+
+  /* CKD stage semantic colors (kept low-chroma, informative not alarming) */
+  --color-stage-g1: #0070f3;
+  --color-stage-g2: #50a2e3;
+  --color-stage-g3a: #f5a623;
+  --color-stage-g3b: #e8871e;
+  --color-stage-g4: #ee6a00;
+  --color-stage-g5: #ee0000;
+
+  /* Fonts */
+  --font-sans: "Geist", "Inter", Arial, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Radii */
+  --radius-xs: 6px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill-category: 64px;
+  --radius-pill: 100px;
+
+  /* Letter spacing tokens matching DESIGN.md typography scale */
+  --tracking-display: -0.05em;
+  --tracking-heading: -0.04em;
+  --tracking-subheading: -0.02em;
+}
+
+/* Dark palette — same structure/semantics as the light theme above, so every
+   component using semantic tokens (bg-canvas, text-ink, border-hairline, …)
+   repaints automatically with no markup changes. */
+.dark {
+  --color-ink: #ededed;
+  --color-body: #b4b4b4;
+  --color-mute: #8f8f8f;
+  --color-faint: #6e6e6e;
+  --color-hairline: #2e2e2e;
+  --color-hairline-soft: #1f1f1f;
+  --color-canvas: #0a0a0a;
+  --color-canvas-elevated: #141414;
+  --color-link: #3291ff;
+  --color-link-deep: #64b5ff;
+  --color-link-soft: #0d2847;
+  --color-error: #ff5f5f;
+  --color-error-deep: #ff8080;
+  --color-warning: #f7b955;
+  --color-warning-soft: #3d2c0f;
+  --color-warning-deep: #ffcf7d;
+  --color-violet: #9151d9;
+  --color-cyan: #63e9cf;
+  --color-pink: #ff4fa0;
+  --color-magenta: #f0568f;
+  --color-success: #3291ff;
+  --color-success-soft: #0d2847;
+
+  --color-stage-g1: #3291ff;
+  --color-stage-g2: #6cb3ec;
+  --color-stage-g3a: #f7b955;
+  --color-stage-g3b: #f3984a;
+  --color-stage-g4: #ff8a3d;
+  --color-stage-g5: #ff5f5f;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    color-scheme: light;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-link-soft);
+  }
+}
+
+@utility container-page {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}

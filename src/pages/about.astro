@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+	title="About Us — GFR Calculator"
+	description="About GFR Calculator: why we built a free, transparent eGFR calculator with step-by-step math and no sign-up required."
+>
+	<article class="container-page py-14 sm:py-20">
+		<div class="mx-auto max-w-2xl">
+			<p class="font-mono text-xs font-medium uppercase tracking-wide text-mute">About Us</p>
+			<h1 class="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">About GFR Calculator</h1>
+
+			<p class="mt-6 text-base leading-relaxed text-body">
+				GFR Calculator is a free, open online tool for estimating glomerular filtration rate
+				(eGFR) using the CKD-EPI 2021, CKD-EPI 2009, MDRD, and Cockcroft-Gault equations. We built
+				it after reading a peer-reviewed study showing that nearly one in five freely available
+				online GFR calculators produced erroneous, clinically misleading results.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">Why we built this</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Most online medical calculators are black boxes: you enter numbers, a result appears, and
+				there is no way to check the arithmetic. We wanted something different — a calculator that
+				shows its work. Every result on this site displays the full formula with your actual
+				numbers substituted in, so you or your clinician can verify the calculation by hand rather
+				than trusting an opaque number.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">What makes this calculator different</h2>
+			<ul class="mt-4 space-y-2 text-base leading-relaxed text-body">
+				<li>Unit conversion between mg/dL and &micro;mol/L is centralized in one tested function, addressing a documented source of error in other calculators.</li>
+				<li>No race-based adjustment is applied to any formula, in line with the 2021 NKF/ASN recommendation.</li>
+				<li>Every formula clearly states its output unit — mL/min/1.73m&sup2; for the eGFR equations, or mL/min for Cockcroft-Gault.</li>
+				<li>All calculations run in your browser. Your inputs are never sent to a server. See our <a href="/privacy-policy" class="text-link hover:text-link-deep">Privacy Policy</a> for details.</li>
+				<li>No account, sign-up, or paywall — the calculator is free to use.</li>
+			</ul>
+
+			<p class="mt-8 text-base leading-relaxed text-body">
+				Read more about the formulas and the research behind our design choices on the
+				<a href="/methodology" class="text-link hover:text-link-deep">methodology</a> page.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">Not a substitute for medical advice</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				This tool is for educational and informational purposes only. It does not provide medical
+				advice, diagnosis, or treatment, and it is not a substitute for consulting a qualified
+				healthcare professional about your kidney function or any medical condition.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">Get in touch</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Questions, corrections, or feedback are welcome on our
+				<a href="/contact" class="text-link hover:text-link-deep">Contact Us</a> page.
+			</p>
+		</div>
+	</article>
+</Layout>

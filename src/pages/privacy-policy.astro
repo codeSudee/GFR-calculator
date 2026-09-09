@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const lastUpdated = 'September 9, 2026';
+---
+
+<Layout
+	title="Privacy Policy — GFR Calculator"
+	description="Privacy policy for GFR Calculator: what data this eGFR calculator collects, how it is used, and how your calculator inputs stay in your browser."
+>
+	<article class="container-page py-14 sm:py-20">
+		<div class="mx-auto max-w-2xl">
+			<p class="font-mono text-xs font-medium uppercase tracking-wide text-mute">Privacy Policy</p>
+			<h1 class="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">Privacy Policy</h1>
+			<p class="mt-4 text-sm text-faint">Last updated: {lastUpdated}</p>
+
+			<p class="mt-6 text-base leading-relaxed text-body">
+				This Privacy Policy explains what information GFR Calculator ("we," "our," or "this site")
+				collects when you use gfrcalc.com, and how that information is used. We designed this
+				calculator to require no sign-up and no account, and to keep your health inputs on your
+				own device.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">Calculator inputs</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				The creatinine, age, sex, and weight values you enter into the GFR calculator are
+				processed entirely in your browser using client-side JavaScript. These values are never
+				transmitted to our servers, stored in a database, or shared with any third party. If you
+				close the tab or refresh the page, your inputs and results are gone.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">Analytics and usage data</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				We may use privacy-respecting analytics tools to understand aggregate traffic patterns,
+				such as which pages are visited and which browsers or devices are used. This data is
+				anonymized or aggregated where possible and is not used to identify you personally, and it
+				is separate from any calculator input you type into the tool.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">Cookies and local storage</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				This site uses your browser's local storage to remember a single preference: whether you
+				have selected light or dark mode. No advertising or tracking cookies are set by this site.
+				Third-party analytics scripts, if enabled, may set their own cookies as described in their
+				respective privacy policies.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">Third-party links</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Our <a href="/methodology" class="text-link hover:text-link-deep">methodology</a> page and
+				footer link to external medical references and research sources. We are not responsible
+				for the privacy practices of those third-party sites.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">Children's privacy</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				This calculator is intended for use by adults aged 18 and over and is not directed at
+				children. We do not knowingly collect personal information from children.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">Changes to this policy</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				We may update this Privacy Policy from time to time. Changes will be posted on this page
+				with an updated "Last updated" date.
+			</p>
+
+			<h2 class="mt-10 text-xl font-semibold tracking-tight text-ink">Contact us</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				If you have questions about this Privacy Policy, please visit our
+				<a href="/contact" class="text-link hover:text-link-deep">Contact Us</a> page.
+			</p>
+		</div>
+	</article>
+</Layout>

@@ -1,0 +1,162 @@
+---
+import { FORMULAS } from '../lib/gfr';
+
+const formulaOrder = ['ckd-epi-2021', 'ckd-epi-2009', 'mdrd', 'cockcroft-gault'] as const;
+---
+
+<div class="rounded-lg border border-hairline bg-canvas-elevated shadow-[0_1px_1px_rgba(0,0,0,0.04)]">
+	<!-- Formula tabs -->
+	<div class="border-b border-hairline px-2 pt-2 sm:px-4">
+		<div role="tablist" aria-label="GFR formula" class="flex flex-wrap gap-1">
+			{
+				formulaOrder.map((id, i) => (
+					<button
+						type="button"
+						role="tab"
+						id={`tab-${id}`}
+						aria-controls="calculator-panel"
+						aria-selected={i === 0 ? 'true' : 'false'}
+						tabindex={i === 0 ? 0 : -1}
+						data-formula-tab={id}
+						class:list={[
+							'rounded-t-sm px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link',
+							i === 0 ? 'text-ink border-b-2 border-ink' : 'text-mute hover:text-ink border-b-2 border-transparent',
+						]}
+					>
+						{FORMULAS[id].shortName}
+					</button>
+				))
+			}
+		</div>
+	</div>
+
+	<div id="calculator-panel" role="tabpanel" aria-labelledby="tab-ckd-epi-2021" class="p-4 sm:p-6">
+		<p id="formula-description" class="mb-6 text-sm text-body">
+			{FORMULAS['ckd-epi-2021'].description}
+		</p>
+
+		<form id="gfr-form" class="grid gap-5 sm:grid-cols-2" novalidate>
+			<div class="sm:col-span-2">
+				<label for="creatinine" class="block text-sm font-medium text-ink">Serum creatinine</label>
+				<div class="mt-1.5 flex rounded-sm border border-hairline bg-canvas-elevated focus-within:ring-2 focus-within:ring-link/40">
+					<input
+						type="number"
+						id="creatinine"
+						name="creatinine"
+						inputmode="decimal"
+						step="0.01"
+						min="0"
+						required
+						autocomplete="off"
+						aria-describedby="creatinine-error"
+						placeholder="1.00"
+						class="w-full flex-1 rounded-l-sm border-0 bg-transparent px-3 py-2 text-base text-ink outline-none placeholder:text-faint sm:text-sm"
+					/>
+					<div class="flex items-center gap-0 border-l border-hairline text-sm" role="radiogroup" aria-label="Creatinine unit">
+						<button
+							type="button"
+							role="radio"
+							data-unit-toggle="mg/dL"
+							aria-checked="true"
+							class="px-3 py-2 font-medium text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
+						>
+							mg/dL
+						</button>
+						<button
+							type="button"
+							role="radio"
+							data-unit-toggle="umol/L"
+							aria-checked="false"
+							class="px-3 py-2 font-medium text-mute transition-colors hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
+						>
+							&micro;mol/L
+						</button>
+					</div>
+				</div>
+				<p id="creatinine-error" class="mt-1 min-h-[1rem] text-xs text-error" aria-live="polite"></p>
+			</div>
+
+			<div>
+				<label for="age" class="block text-sm font-medium text-ink">Age</label>
+				<div class="mt-1.5 flex rounded-sm border border-hairline bg-canvas-elevated focus-within:ring-2 focus-within:ring-link/40">
+					<input
+						type="number"
+						id="age"
+						name="age"
+						inputmode="numeric"
+						step="1"
+						min="18"
+						max="120"
+						required
+						autocomplete="off"
+						aria-describedby="age-error"
+						placeholder="60"
+						class="w-full rounded-sm border-0 bg-transparent px-3 py-2 text-base text-ink outline-none placeholder:text-faint sm:text-sm"
+					/>
+					<span class="flex items-center px-3 text-sm text-mute">years</span>
+				</div>
+				<p id="age-error" class="mt-1 min-h-[1rem] text-xs text-error" aria-live="polite"></p>
+			</div>
+
+			<div>
+				<span class="block text-sm font-medium text-ink">Biological sex</span>
+				<div class="mt-1.5 flex rounded-sm border border-hairline" role="radiogroup" aria-label="Biological sex">
+					<button
+						type="button"
+						role="radio"
+						data-sex-toggle="female"
+						aria-checked="true"
+						class="flex-1 rounded-l-sm px-3 py-2 text-sm font-medium text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
+					>
+						Female
+					</button>
+					<button
+						type="button"
+						role="radio"
+						data-sex-toggle="male"
+						aria-checked="false"
+						class="flex-1 rounded-r-sm border-l border-hairline px-3 py-2 text-sm font-medium text-mute transition-colors hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link"
+					>
+						Male
+					</button>
+				</div>
+				<p class="mt-1 text-xs text-faint">Required by the formula; refers to biological sex, not gender identity.</p>
+			</div>
+
+			<div data-weight-field class="sm:col-span-2 hidden">
+				<label for="weight" class="block text-sm font-medium text-ink">Body weight</label>
+				<div class="mt-1.5 flex rounded-sm border border-hairline bg-canvas-elevated focus-within:ring-2 focus-within:ring-link/40">
+					<input
+						type="number"
+						id="weight"
+						name="weight"
+						inputmode="decimal"
+						step="0.1"
+						min="0"
+						autocomplete="off"
+						aria-describedby="weight-error"
+						placeholder="70"
+						class="w-full rounded-sm border-0 bg-transparent px-3 py-2 text-base text-ink outline-none placeholder:text-faint sm:text-sm"
+					/>
+					<span class="flex items-center px-3 text-sm text-mute">kg</span>
+				</div>
+				<p id="weight-error" class="mt-1 min-h-[1rem] text-xs text-error" aria-live="polite"></p>
+				<p class="mt-1 text-xs text-faint">
+					Cockcroft-Gault requires body weight and is commonly used for drug-dosing calculations
+					rather than general kidney function screening.
+				</p>
+			</div>
+
+			<div class="sm:col-span-2">
+				<button
+					type="submit"
+					class="w-full rounded-pill bg-ink px-6 py-2.5 text-sm font-medium text-canvas transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link sm:w-auto"
+				>
+					Calculate eGFR
+				</button>
+			</div>
+		</form>
+
+		<div id="result-region" aria-live="polite" class="mt-2"></div>
+	</div>
+</div>
