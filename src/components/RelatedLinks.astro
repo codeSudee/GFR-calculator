@@ -1,0 +1,27 @@
+---
+const links = [
+	{ href: '/', title: 'GFR Calculator', text: 'Estimate eGFR with CKD-EPI, MDRD, or Cockcroft-Gault.' },
+	{ href: '/ckd-stages', title: 'CKD stages explained', text: 'KDIGO GFR and albuminuria categories.' },
+	{ href: '/normal-gfr-by-age', title: 'Normal GFR by age', text: 'Average GFR values by decade of life.' },
+	{ href: '/egfr-vs-creatinine-clearance', title: 'eGFR vs creatinine clearance', text: 'How the two measures differ and when each is used.' },
+	{ href: '/creatinine-converter', title: 'Creatinine converter', text: 'Convert mg/dL to µmol/L and back.' },
+	{ href: '/methodology', title: 'Methodology', text: 'Formulas, constants, and sources.' },
+];
+
+const { exclude = '' } = Astro.props;
+const shown = links.filter((l) => l.href !== exclude);
+---
+
+<aside aria-labelledby="related-heading" class="mt-14 border-t border-hairline pt-8">
+	<h2 id="related-heading" class="text-lg font-semibold tracking-tight text-ink">Related guides and tools</h2>
+	<ul class="mt-4 grid gap-3 sm:grid-cols-2">
+		{
+			shown.map((l) => (
+				<li class="rounded-md border border-hairline p-4">
+					<a href={l.href} class="text-sm font-medium text-link hover:text-link-deep">{l.title}</a>
+					<p class="mt-1 text-sm text-body">{l.text}</p>
+				</li>
+			))
+		}
+	</ul>
+</aside>

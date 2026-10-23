@@ -2,32 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://gfrcalc.com/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-10-23</lastmod>
+  </url>
+  <url>
+    <loc>https://gfrcalc.com/ckd-stages</loc>
+    <lastmod>2026-10-23</lastmod>
+  </url>
+  <url>
+    <loc>https://gfrcalc.com/normal-gfr-by-age</loc>
+    <lastmod>2026-10-23</lastmod>
+  </url>
+  <url>
+    <loc>https://gfrcalc.com/egfr-vs-creatinine-clearance</loc>
+    <lastmod>2026-10-23</lastmod>
+  </url>
+  <url>
+    <loc>https://gfrcalc.com/creatinine-converter</loc>
+    <lastmod>2026-10-23</lastmod>
   </url>
   <url>
     <loc>https://gfrcalc.com/methodology</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-10-23</lastmod>
   </url>
   <url>
     <loc>https://gfrcalc.com/about</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <lastmod>2026-10-23</lastmod>
   </url>
   <url>
     <loc>https://gfrcalc.com/contact</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <lastmod>2026-10-23</lastmod>
   </url>
   <url>
     <loc>https://gfrcalc.com/privacy-policy</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <lastmod>2026-10-23</lastmod>
   </url>
   <url>
     <loc>https://gfrcalc.com/terms</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <lastmod>2026-09-09</lastmod>
   </url>
 </urlset>

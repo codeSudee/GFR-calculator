@@ -1,0 +1,18 @@
+# GFR Calculator
+
+> Free online eGFR and creatinine clearance calculator. Computes CKD-EPI 2021, CKD-EPI 2009, MDRD, and Cockcroft-Gault results in the browser, with step-by-step math and mg/dL / µmol/L unit conversion. Educational use only; not medical advice.
+
+## Tool
+- [GFR Calculator](https://gfrcalc.com/): the calculator, plus an FAQ on formulas, weight, creatinine, and pediatric use.
+
+## Guides
+- [CKD stages](https://gfrcalc.com/ckd-stages): KDIGO GFR categories G1-G5 and albuminuria categories A1-A3.
+- [Normal GFR by age](https://gfrcalc.com/normal-gfr-by-age): average GFR by decade of life.
+- [eGFR vs creatinine clearance](https://gfrcalc.com/egfr-vs-creatinine-clearance): units, BSA indexing, and use cases.
+- [Creatinine converter](https://gfrcalc.com/creatinine-converter): mg/dL to µmol/L (factor 88.4).
+- [Methodology](https://gfrcalc.com/methodology): formulas, constants, and literature sources.
+
+## Site
+- [About](https://gfrcalc.com/about)
+- [Contact](https://gfrcalc.com/contact)
+- [Privacy Policy](https://gfrcalc.com/privacy-policy)

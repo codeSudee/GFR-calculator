@@ -1,0 +1,135 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
+
+const title = 'Creatinine Converter: mg/dL to µmol/L (and Back)';
+const description =
+	'Free serum creatinine unit converter. Convert mg/dL to µmol/L and µmol/L to mg/dL using the standard 88.4 factor, with typical reference ranges and worked examples.';
+---
+
+<Layout
+	title={title}
+	description={description}
+	modified="2026-10-23"
+	breadcrumbs={[{ name: 'Creatinine Converter', href: '/creatinine-converter' }]}
+	schema={[
+		{
+			'@type': 'WebApplication',
+			name: 'Creatinine Unit Converter',
+			url: 'https://gfrcalc.com/creatinine-converter',
+			description,
+			applicationCategory: 'HealthApplication',
+			operatingSystem: 'Any (web browser)',
+			offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+		},
+	]}
+>
+	<article class="container-page py-14 sm:py-20">
+		<div class="mx-auto max-w-2xl">
+			<Breadcrumbs trail={[{ name: 'Creatinine Converter' }]} />
+			<h1 class="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+				Creatinine converter: mg/dL &harr; &micro;mol/L
+			</h1>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Lab reports in the United States usually give serum creatinine in mg/dL, while most other
+				countries use &micro;mol/L. Enter a value in either box to convert it.
+			</p>
+
+			<div class="mt-8 grid gap-4 rounded-md border border-hairline p-5 sm:grid-cols-2">
+				<div>
+					<label for="mgdl" class="block text-sm font-medium text-ink">Creatinine (mg/dL)</label>
+					<input
+						id="mgdl"
+						type="number"
+						inputmode="decimal"
+						min="0"
+						step="any"
+						placeholder="e.g. 1.0"
+						class="mt-2 w-full rounded-md border border-hairline bg-canvas px-3 py-2 text-base text-ink"
+					/>
+				</div>
+				<div>
+					<label for="umol" class="block text-sm font-medium text-ink">Creatinine (&micro;mol/L)</label>
+					<input
+						id="umol"
+						type="number"
+						inputmode="decimal"
+						min="0"
+						step="any"
+						placeholder="e.g. 88.4"
+						class="mt-2 w-full rounded-md border border-hairline bg-canvas px-3 py-2 text-base text-ink"
+					/>
+				</div>
+			</div>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">The conversion formula</h2>
+			<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">&micro;mol/L = mg/dL &times; 88.4
+mg/dL = &micro;mol/L &divide; 88.4</pre>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				The factor comes from creatinine's molecular weight of about 113.12 g/mol. A creatinine of
+				1.2 mg/dL is 1.2 &times; 88.4 &asymp; 106 &micro;mol/L, and 150 &micro;mol/L is
+				150 &divide; 88.4 &asymp; 1.70 mg/dL.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Quick reference</h2>
+			<div class="mt-4 overflow-x-auto rounded-md border border-hairline">
+				<table class="w-full text-left text-sm">
+					<caption class="sr-only">Creatinine conversion examples</caption>
+					<thead>
+						<tr class="border-b border-hairline bg-hairline-soft">
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">mg/dL</th>
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">&micro;mol/L</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-hairline">
+						<tr><td class="px-4 py-2.5 text-body">0.6</td><td class="px-4 py-2.5 text-body">53</td></tr>
+						<tr><td class="px-4 py-2.5 text-body">0.8</td><td class="px-4 py-2.5 text-body">71</td></tr>
+						<tr><td class="px-4 py-2.5 text-body">1.0</td><td class="px-4 py-2.5 text-body">88</td></tr>
+						<tr><td class="px-4 py-2.5 text-body">1.2</td><td class="px-4 py-2.5 text-body">106</td></tr>
+						<tr><td class="px-4 py-2.5 text-body">1.5</td><td class="px-4 py-2.5 text-body">133</td></tr>
+						<tr><td class="px-4 py-2.5 text-body">2.0</td><td class="px-4 py-2.5 text-body">177</td></tr>
+						<tr><td class="px-4 py-2.5 text-body">3.0</td><td class="px-4 py-2.5 text-body">265</td></tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Typical serum creatinine ranges</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Reference ranges differ between laboratories and methods, so use the range printed on
+				your own report. Typical adult ranges are roughly 0.7&ndash;1.3 mg/dL (60&ndash;115
+				&micro;mol/L) for men and 0.6&ndash;1.1 mg/dL (50&ndash;95 &micro;mol/L) for women.
+				Creatinine rises with muscle mass, so a "normal" value for one person can be high for
+				another. A creatinine value alone does not tell you kidney function; it has to be
+				combined with age and sex in an equation. Use the
+				<a href="/" class="text-link hover:text-link-deep">GFR calculator</a>, which accepts
+				either unit and converts for you.
+			</p>
+
+			<div class="mt-12"><MedicalDisclaimer /></div>
+			<RelatedLinks exclude="/creatinine-converter" />
+		</div>
+	</article>
+</Layout>
+
+<script>
+	const FACTOR = 88.4;
+	const mg = document.getElementById('mgdl') as HTMLInputElement | null;
+	const umol = document.getElementById('umol') as HTMLInputElement | null;
+
+	// Round to at most 2 decimals and strip trailing zeros.
+	const fmt = (n: number) => String(Math.round(n * 100) / 100);
+
+	mg?.addEventListener('input', () => {
+		if (!umol) return;
+		const v = parseFloat(mg.value);
+		umol.value = Number.isFinite(v) ? fmt(v * FACTOR) : '';
+	});
+
+	umol?.addEventListener('input', () => {
+		if (!mg) return;
+		const v = parseFloat(umol.value);
+		mg.value = Number.isFinite(v) ? fmt(v / FACTOR) : '';
+	});
+</script>

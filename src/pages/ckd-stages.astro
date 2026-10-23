@@ -1,0 +1,142 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
+
+const title = 'CKD Stages by GFR: KDIGO G1–G5 and Albuminuria Categories';
+const description =
+	'Chronic kidney disease stages explained: the KDIGO GFR categories G1 to G5, albuminuria categories A1 to A3, what each eGFR range means, and how CKD is diagnosed.';
+---
+
+<Layout
+	title={title}
+	description={description}
+	modified="2026-10-23"
+	breadcrumbs={[{ name: 'CKD Stages', href: '/ckd-stages' }]}
+	schema={[
+		{
+			'@type': 'Article',
+			headline: title,
+			description,
+			mainEntityOfPage: { '@id': 'https://gfrcalc.com/ckd-stages#webpage' },
+			dateModified: '2026-10-23',
+			datePublished: '2026-10-23',
+			author: { '@id': 'https://gfrcalc.com/#organization' },
+			publisher: { '@id': 'https://gfrcalc.com/#organization' },
+			image: 'https://gfrcalc.com/og-image.png',
+		},
+	]}
+>
+	<article class="container-page py-14 sm:py-20">
+		<div class="mx-auto max-w-2xl">
+			<Breadcrumbs trail={[{ name: 'CKD Stages' }]} />
+			<h1 class="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+				CKD stages by GFR: the KDIGO classification
+			</h1>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Chronic kidney disease (CKD) is classified using two measurements: the estimated
+				glomerular filtration rate (eGFR), which describes how well the kidneys filter blood, and
+				albuminuria, which describes how much albumin leaks into the urine. The KDIGO guideline
+				combines them into a "cause, GFR category, albuminuria category" system. This guide
+				explains each category. To get your own number, use the
+				<a href="/" class="text-link hover:text-link-deep">GFR calculator</a>.
+			</p>
+			<p class="mt-3 text-sm text-faint">Last updated October 23, 2026</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">GFR categories (G1 to G5)</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				GFR categories are defined by eGFR in mL/min/1.73m&sup2;. Higher numbers mean better
+				filtration.
+			</p>
+			<div class="mt-4 overflow-x-auto rounded-md border border-hairline">
+				<table class="w-full text-left text-sm">
+					<caption class="sr-only">KDIGO GFR categories</caption>
+					<thead>
+						<tr class="border-b border-hairline bg-hairline-soft">
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">Category</th>
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">eGFR (mL/min/1.73m&sup2;)</th>
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">Terms</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-hairline">
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G1</th><td class="px-4 py-2.5 text-body">&ge; 90</td><td class="px-4 py-2.5 text-body">Normal or high</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G2</th><td class="px-4 py-2.5 text-body">60&ndash;89</td><td class="px-4 py-2.5 text-body">Mildly decreased</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G3a</th><td class="px-4 py-2.5 text-body">45&ndash;59</td><td class="px-4 py-2.5 text-body">Mildly to moderately decreased</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G3b</th><td class="px-4 py-2.5 text-body">30&ndash;44</td><td class="px-4 py-2.5 text-body">Moderately to severely decreased</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G4</th><td class="px-4 py-2.5 text-body">15&ndash;29</td><td class="px-4 py-2.5 text-body">Severely decreased</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G5</th><td class="px-4 py-2.5 text-body">&lt; 15</td><td class="px-4 py-2.5 text-body">Kidney failure</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Note that G1 and G2 do not by themselves mean CKD. They count as CKD only when another
+				marker of kidney damage is present, such as albuminuria, urine sediment abnormalities,
+				structural abnormalities on imaging, or a kidney transplant.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Albuminuria categories (A1 to A3)</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Albuminuria is usually measured as the urine albumin-to-creatinine ratio (ACR) on a
+				spot urine sample. At the same eGFR, more albumin in the urine means higher risk of
+				progression and of cardiovascular disease.
+			</p>
+			<div class="mt-4 overflow-x-auto rounded-md border border-hairline">
+				<table class="w-full text-left text-sm">
+					<caption class="sr-only">KDIGO albuminuria categories</caption>
+					<thead>
+						<tr class="border-b border-hairline bg-hairline-soft">
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">Category</th>
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">ACR (mg/g)</th>
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">ACR (mg/mmol)</th>
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">Terms</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-hairline">
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">A1</th><td class="px-4 py-2.5 text-body">&lt; 30</td><td class="px-4 py-2.5 text-body">&lt; 3</td><td class="px-4 py-2.5 text-body">Normal to mildly increased</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">A2</th><td class="px-4 py-2.5 text-body">30&ndash;300</td><td class="px-4 py-2.5 text-body">3&ndash;30</td><td class="px-4 py-2.5 text-body">Moderately increased</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">A3</th><td class="px-4 py-2.5 text-body">&gt; 300</td><td class="px-4 py-2.5 text-body">&gt; 30</td><td class="px-4 py-2.5 text-body">Severely increased</td></tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">How CKD is diagnosed</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				KDIGO defines CKD as abnormalities of kidney structure or function that are present for
+				more than three months and that affect health. In practice that means an eGFR below 60
+				mL/min/1.73m&sup2; or a marker of kidney damage (most commonly albuminuria), confirmed on
+				repeat testing. One low result can be caused by dehydration, a recent illness, intense
+				exercise, a high-meat meal, or certain medicines, which is why clinicians repeat the test
+				before drawing conclusions.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">What the stages mean in practice</h2>
+			<ul class="mt-4 space-y-3 text-base leading-relaxed text-body">
+				<li><strong>G1&ndash;G2:</strong> Kidney function is normal or mildly reduced. Care focuses on managing risk factors such as blood pressure, blood sugar, and albuminuria when it is present.</li>
+				<li><strong>G3a&ndash;G3b:</strong> Function is moderately reduced. Clinicians typically review medicines for kidney safety and check for complications such as anemia and bone-mineral changes, especially in G3b.</li>
+				<li><strong>G4:</strong> Severely reduced function. Planning for kidney replacement therapy (dialysis or transplant) is usually discussed with a nephrologist.</li>
+				<li><strong>G5:</strong> Kidney failure. Many people at this level need dialysis or a transplant, although some choose conservative management.</li>
+			</ul>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Which eGFR equation is used for staging?</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Staging uses an eGFR equation, not Cockcroft-Gault. The 2021 CKD-EPI creatinine equation
+				is the current standard in the United States, as described on our
+				<a href="/methodology" class="text-link hover:text-link-deep">methodology page</a>.
+				Cockcroft-Gault reports creatinine clearance in mL/min and is not indexed to body surface
+				area, so its values should not be placed directly on the G1&ndash;G5 scale. See
+				<a href="/egfr-vs-creatinine-clearance" class="text-link hover:text-link-deep">eGFR vs creatinine clearance</a>
+				for the difference.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Sources</h2>
+			<ul class="mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-body">
+				<li>KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of Chronic Kidney Disease. <em>Kidney International</em>. 2024;105(4S):S117&ndash;S314.</li>
+				<li>Inker LA, et al. New Creatinine- and Cystatin C&ndash;Based Equations to Estimate GFR without Race. <em>N Engl J Med</em>. 2021;385:1737&ndash;1749.</li>
+			</ul>
+
+			<div class="mt-12"><MedicalDisclaimer /></div>
+			<RelatedLinks exclude="/ckd-stages" />
+		</div>
+	</article>
+</Layout>

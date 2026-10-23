@@ -5,6 +5,99 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 ---
 
 <Layout
+	modified="2026-10-23"
+	schema={[
+		{
+			'@type': 'WebApplication',
+			name: 'GFR Calculator',
+			url: 'https://gfrcalc.com/',
+			description: 'Free GFR calculator with weight, creatinine, and age. Computes eGFR using CKD-EPI 2021, CKD-EPI 2009, MDRD, and Cockcroft-Gault formulas with full step-by-step math and unit conversion.',
+			applicationCategory: 'HealthApplication',
+			operatingSystem: 'Any (web browser)',
+			offers: {
+				'@type': 'Offer',
+				price: '0',
+				priceCurrency: 'USD',
+			},
+		},
+		{
+			'@type': 'FAQPage',
+			mainEntity: [
+				{
+					'@type': 'Question',
+					name: 'What is the most accurate GFR calculator?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: "No online calculator is more accurate than the formula it implements, since every GFR calculator is only estimating kidney function from the same handful of equations. CKD-EPI 2021 is currently considered the most accurate general-purpose formula and is the one recommended by the NKF and ASN, because it was validated on a larger, more diverse population than MDRD and removed the race coefficient that caused systematic errors in Black patients. Accuracy also depends on the calculator's implementation — a 2020 study found 8 of 47 freely available online GFR calculators produced erroneous results due to unit-conversion bugs, not formula choice.",
+					},
+				},
+				{
+					'@type': 'Question',
+					name: 'What is the best GFR calculator?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'The best GFR calculator for you depends on why you need the number. For general kidney-function screening, a CKD-EPI 2021 calculator is the current standard. For drug-dosing decisions, a Cockcroft-Gault calculator with weight is usually preferred because that is the population the dosing guidelines were built on. Beyond formula choice, look for a calculator that shows its unit conversion and step-by-step math so you can verify the result yourself, rather than trusting an unexplained number.',
+					},
+				},
+				{
+					'@type': 'Question',
+					name: 'How to calculate GFR formula?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Every GFR formula takes the same core inputs — serum creatinine, age, and sex — and plugs them into a fixed equation. For CKD-EPI 2021, you divide creatinine by a sex-specific constant (kappa), raise the min and max of that ratio to fixed exponents, multiply by 142, then apply an age-decay term (0.9938 raised to your age) and a small multiplier if female. Cockcroft-Gault instead multiplies (140 minus age) by weight in kg, divides by 72 times serum creatinine, and applies a 0.85 multiplier if female. This calculator shows every intermediate step for whichever formula you choose.',
+					},
+				},
+				{
+					'@type': 'Question',
+					name: 'What is the GFR calculator formula?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: "There isn't a single GFR calculator formula — this site implements four: CKD-EPI 2021 (race-free, current NKF/ASN standard), CKD-EPI 2009 (the predecessor equation, still referenced on some lab reports), MDRD (an older four-variable equation), and Cockcroft-Gault (a weight-based creatinine clearance estimate used mainly for drug dosing). Full formula definitions, constants, and literature sources for each are documented on the methodology page.",
+					},
+				},
+				{
+					'@type': 'Question',
+					name: 'How does a GFR calculator with weight work?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: "A GFR calculator with weight uses the Cockcroft-Gault equation, which estimates creatinine clearance in mL/min directly from body weight rather than normalizing to a standard 1.73m² body surface area like CKD-EPI and MDRD do. It multiplies (140 minus age) by weight in kilograms, divides by 72 times serum creatinine in mg/dL, and applies a 0.85 multiplier for female patients. Because it uses actual body weight, it's the formula most drug-dosing guidelines were originally built around.",
+					},
+				},
+				{
+					'@type': 'Question',
+					name: 'What is a GFR calculator with creatinine?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Every formula on this page is a GFR calculator with creatinine, since serum creatinine is the core lab value all four equations are built on. You can enter creatinine in either mg/dL (common in the US) or µmol/L (common elsewhere), and the calculator converts between them automatically using the standard factor of 1 mg/dL ≈ 88.4 µmol/L before running any formula.',
+					},
+				},
+				{
+					'@type': 'Question',
+					name: 'Is there a GFR calculator for pediatric patients?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Not on this site. CKD-EPI, MDRD, and Cockcroft-Gault were all derived and validated on adults, so this calculator requires an age of 18 or older. Pediatric GFR estimation needs a different equation — the bedside Schwartz formula, which uses height rather than the adult-specific constants above — and is intentionally out of scope here so the tool never returns a number that looks precise but is not clinically valid for a child.',
+					},
+				},
+				{
+					'@type': 'Question',
+					name: 'What is the Cockcroft-Gault GFR calculator?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: "The Cockcroft-Gault calculator estimates creatinine clearance in mL/min using age, sex, weight, and serum creatinine: CrCl = [(140 − Age) × Weight(kg)] / (72 × Scr), multiplied by 0.85 for female patients. Published in 1976, it predates CKD-EPI and MDRD and reports an un-normalized clearance rather than a body-surface-area-indexed eGFR, which is why it's still the reference formula for many drug-dosing guidelines.",
+					},
+				},
+				{
+					'@type': 'Question',
+					name: 'What is the CKD-EPI GFR calculator?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'The CKD-EPI calculator estimates GFR in mL/min/1.73m² using serum creatinine, age, and sex. This site implements both the 2021 race-free version — the current NKF/ASN-recommended standard — and the original 2009 version some older lab reports still cite. CKD-EPI 2021 removed the race coefficient present in the 2009 equation after the NKF/ASN Task Force found it systematically overestimated kidney function in Black patients.',
+					},
+				},
+			],
+		},
+	]}
 	title="GFR Calculator — Free Online eGFR & Kidney Function Calculator"
 	description="Free GFR calculator with weight, creatinine, and age. Get instant eGFR results using CKD-EPI, MDRD, or Cockcroft-Gault formulas, with full step-by-step math and unit conversion."
 >
@@ -114,8 +207,8 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 					serum creatinine, along with your age and sex. Because true GFR requires an invasive
 					clearance test, doctors normally rely on an <strong>eGFR calculator</strong> to estimate
 					it from routine labs. This tool is a free <strong>GFR calculator online</strong> that
-					works entirely in your browser: no sign-up, no data sent to a server, and no ads
-					between you and your result.
+					works entirely in your browser: no sign-up is required, and the values you enter
+					are never sent to a server.
 				</p>
 
 				<h3 class="mt-8 text-lg font-semibold text-ink">GFR calculator formula options</h3>
@@ -183,6 +276,34 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 					<a href="/methodology" class="text-link hover:text-link-deep">methodology page</a> so
 					you can judge its accuracy for yourself instead of taking it on faith.
 				</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="border-t border-hairline py-16">
+		<div class="container-page">
+			<div class="mx-auto max-w-2xl">
+				<h2 class="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
+					Understand your result
+				</h2>
+				<ul class="mt-6 grid gap-3 sm:grid-cols-2">
+					<li class="rounded-md border border-hairline p-4">
+						<a href="/ckd-stages" class="text-sm font-medium text-link hover:text-link-deep">CKD stages explained</a>
+						<p class="mt-1 text-sm text-body">What G1&ndash;G5 and the albuminuria categories mean.</p>
+					</li>
+					<li class="rounded-md border border-hairline p-4">
+						<a href="/normal-gfr-by-age" class="text-sm font-medium text-link hover:text-link-deep">Normal GFR by age</a>
+						<p class="mt-1 text-sm text-body">Average values from age 20 to 70+.</p>
+					</li>
+					<li class="rounded-md border border-hairline p-4">
+						<a href="/egfr-vs-creatinine-clearance" class="text-sm font-medium text-link hover:text-link-deep">eGFR vs creatinine clearance</a>
+						<p class="mt-1 text-sm text-body">Why the two numbers differ and when each is used.</p>
+					</li>
+					<li class="rounded-md border border-hairline p-4">
+						<a href="/creatinine-converter" class="text-sm font-medium text-link hover:text-link-deep">Creatinine converter</a>
+						<p class="mt-1 text-sm text-body">Switch between mg/dL and &micro;mol/L.</p>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</section>
@@ -359,99 +480,3 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 		</div>
 	</section>
 </Layout>
-
-<script type="application/ld+json" set:html={JSON.stringify({
-	'@context': 'https://schema.org',
-	'@graph': [
-		{
-			'@type': 'WebApplication',
-			name: 'GFR Calculator',
-			url: 'https://gfrcalc.com/',
-			description: 'Free GFR calculator with weight, creatinine, and age. Computes eGFR using CKD-EPI 2021, CKD-EPI 2009, MDRD, and Cockcroft-Gault formulas with full step-by-step math and unit conversion.',
-			applicationCategory: 'HealthApplication',
-			operatingSystem: 'Any (web browser)',
-			offers: {
-				'@type': 'Offer',
-				price: '0',
-				priceCurrency: 'USD',
-			},
-		},
-		{
-			'@type': 'FAQPage',
-			mainEntity: [
-				{
-					'@type': 'Question',
-					name: 'What is the most accurate GFR calculator?',
-					acceptedAnswer: {
-						'@type': 'Answer',
-						text: "No online calculator is more accurate than the formula it implements, since every GFR calculator is only estimating kidney function from the same handful of equations. CKD-EPI 2021 is currently considered the most accurate general-purpose formula and is the one recommended by the NKF and ASN, because it was validated on a larger, more diverse population than MDRD and removed the race coefficient that caused systematic errors in Black patients. Accuracy also depends on the calculator's implementation — a 2020 study found 8 of 47 freely available online GFR calculators produced erroneous results due to unit-conversion bugs, not formula choice.",
-					},
-				},
-				{
-					'@type': 'Question',
-					name: 'What is the best GFR calculator?',
-					acceptedAnswer: {
-						'@type': 'Answer',
-						text: 'The best GFR calculator for you depends on why you need the number. For general kidney-function screening, a CKD-EPI 2021 calculator is the current standard. For drug-dosing decisions, a Cockcroft-Gault calculator with weight is usually preferred because that is the population the dosing guidelines were built on. Beyond formula choice, look for a calculator that shows its unit conversion and step-by-step math so you can verify the result yourself, rather than trusting an unexplained number.',
-					},
-				},
-				{
-					'@type': 'Question',
-					name: 'How to calculate GFR formula?',
-					acceptedAnswer: {
-						'@type': 'Answer',
-						text: 'Every GFR formula takes the same core inputs — serum creatinine, age, and sex — and plugs them into a fixed equation. For CKD-EPI 2021, you divide creatinine by a sex-specific constant (kappa), raise the min and max of that ratio to fixed exponents, multiply by 142, then apply an age-decay term (0.9938 raised to your age) and a small multiplier if female. Cockcroft-Gault instead multiplies (140 minus age) by weight in kg, divides by 72 times serum creatinine, and applies a 0.85 multiplier if female. This calculator shows every intermediate step for whichever formula you choose.',
-					},
-				},
-				{
-					'@type': 'Question',
-					name: 'What is the GFR calculator formula?',
-					acceptedAnswer: {
-						'@type': 'Answer',
-						text: "There isn't a single GFR calculator formula — this site implements four: CKD-EPI 2021 (race-free, current NKF/ASN standard), CKD-EPI 2009 (the predecessor equation, still referenced on some lab reports), MDRD (an older four-variable equation), and Cockcroft-Gault (a weight-based creatinine clearance estimate used mainly for drug dosing). Full formula definitions, constants, and literature sources for each are documented on the methodology page.",
-					},
-				},
-				{
-					'@type': 'Question',
-					name: 'How does a GFR calculator with weight work?',
-					acceptedAnswer: {
-						'@type': 'Answer',
-						text: "A GFR calculator with weight uses the Cockcroft-Gault equation, which estimates creatinine clearance in mL/min directly from body weight rather than normalizing to a standard 1.73m² body surface area like CKD-EPI and MDRD do. It multiplies (140 minus age) by weight in kilograms, divides by 72 times serum creatinine in mg/dL, and applies a 0.85 multiplier for female patients. Because it uses actual body weight, it's the formula most drug-dosing guidelines were originally built around.",
-					},
-				},
-				{
-					'@type': 'Question',
-					name: 'What is a GFR calculator with creatinine?',
-					acceptedAnswer: {
-						'@type': 'Answer',
-						text: 'Every formula on this page is a GFR calculator with creatinine, since serum creatinine is the core lab value all four equations are built on. You can enter creatinine in either mg/dL (common in the US) or µmol/L (common elsewhere), and the calculator converts between them automatically using the standard factor of 1 mg/dL ≈ 88.4 µmol/L before running any formula.',
-					},
-				},
-				{
-					'@type': 'Question',
-					name: 'Is there a GFR calculator for pediatric patients?',
-					acceptedAnswer: {
-						'@type': 'Answer',
-						text: 'Not on this site. CKD-EPI, MDRD, and Cockcroft-Gault were all derived and validated on adults, so this calculator requires an age of 18 or older. Pediatric GFR estimation needs a different equation — the bedside Schwartz formula, which uses height rather than the adult-specific constants above — and is intentionally out of scope here so the tool never returns a number that looks precise but is not clinically valid for a child.',
-					},
-				},
-				{
-					'@type': 'Question',
-					name: 'What is the Cockcroft-Gault GFR calculator?',
-					acceptedAnswer: {
-						'@type': 'Answer',
-						text: "The Cockcroft-Gault calculator estimates creatinine clearance in mL/min using age, sex, weight, and serum creatinine: CrCl = [(140 − Age) × Weight(kg)] / (72 × Scr), multiplied by 0.85 for female patients. Published in 1976, it predates CKD-EPI and MDRD and reports an un-normalized clearance rather than a body-surface-area-indexed eGFR, which is why it's still the reference formula for many drug-dosing guidelines.",
-					},
-				},
-				{
-					'@type': 'Question',
-					name: 'What is the CKD-EPI GFR calculator?',
-					acceptedAnswer: {
-						'@type': 'Answer',
-						text: 'The CKD-EPI calculator estimates GFR in mL/min/1.73m² using serum creatinine, age, and sex. This site implements both the 2021 race-free version — the current NKF/ASN-recommended standard — and the original 2009 version some older lab reports still cite. CKD-EPI 2021 removed the race coefficient present in the 2009 equation after the NKF/ASN Task Force found it systematically overestimated kidney function in Black patients.',
-					},
-				},
-			],
-		},
-	],
-})} />

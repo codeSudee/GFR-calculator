@@ -6,21 +6,83 @@ import '../styles/global.css';
 interface Props {
 	title?: string;
 	description?: string;
-	keywords?: string;
 	image?: string;
 	noindex?: boolean;
+	/** Page-specific JSON-LD nodes, merged into the sitewide @graph. */
+	schema?: Record<string, unknown>[];
+	/** Breadcrumb trail after Home, e.g. [{ name: 'CKD Stages', href: '/ckd-stages' }]. */
+	breadcrumbs?: { name: string; href: string }[];
+	/** ISO date (YYYY-MM-DD) of the last substantive content update. */
+	modified?: string;
 }
 
 const {
 	title = 'GFR Calculator — Free Online eGFR & Kidney Function Calculator',
 	description = 'Free GFR calculator with weight, creatinine, and age — computes eGFR using CKD-EPI, MDRD, and Cockcroft-Gault formulas. Includes a pediatric GFR calculator, full unit conversion, and step-by-step math for every result.',
-	keywords = 'GFR calculator, eGFR calculator, GFR calculator with weight, GFR calculator formula, GFR calculator with creatinine, GFR calculator pediatric, GFR calculator Cockcroft, GFR calculator CKD-EPI, best GFR calculator, GFR calculator online, kidney function calculator, creatinine clearance calculator, CKD-EPI calculator, MDRD calculator, Cockcroft-Gault calculator',
 	image = '/og-image.png',
 	noindex = false,
+	schema = [],
+	breadcrumbs = [],
+	modified,
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// Static output is emitted as page.html, so strip the extension (and index) to get the public URL.
+const canonicalPath = Astro.url.pathname.replace(/(?:index)?\.html$/, '').replace(/(.)\/$/, '$1') || '/';
+const canonicalURL = new URL(canonicalPath, Astro.site);
 const ogImageURL = new URL(image, Astro.site);
+const origin = 'https://gfrcalc.com';
+
+const breadcrumbNode = breadcrumbs.length
+	? {
+			'@type': 'BreadcrumbList',
+			'@id': `${canonicalURL.href}#breadcrumb`,
+			itemListElement: [
+				{ '@type': 'ListItem', position: 1, name: 'Home', item: `${origin}/` },
+				...breadcrumbs.map((crumb, i) => ({
+					'@type': 'ListItem',
+					position: i + 2,
+					name: crumb.name,
+					item: `${origin}${crumb.href}`,
+				})),
+			],
+		}
+	: null;
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@graph': [
+		{
+			'@type': 'Organization',
+			'@id': `${origin}/#organization`,
+			name: 'GFR Calculator',
+			url: `${origin}/`,
+			logo: { '@type': 'ImageObject', url: `${origin}/web-app-manifest-512x512.png`, width: 512, height: 512 },
+		},
+		{
+			'@type': 'WebSite',
+			'@id': `${origin}/#website`,
+			url: `${origin}/`,
+			name: 'GFR Calculator',
+			inLanguage: 'en',
+			publisher: { '@id': `${origin}/#organization` },
+		},
+		{
+			'@type': 'WebPage',
+			'@id': `${canonicalURL.href}#webpage`,
+			url: canonicalURL.href,
+			name: title,
+			description,
+			inLanguage: 'en',
+			isPartOf: { '@id': `${origin}/#website` },
+			publisher: { '@id': `${origin}/#organization` },
+			primaryImageOfPage: { '@type': 'ImageObject', url: ogImageURL.href },
+			...(modified ? { dateModified: modified } : {}),
+			...(breadcrumbNode ? { breadcrumb: { '@id': breadcrumbNode['@id'] } } : {}),
+		},
+		...(breadcrumbNode ? [breadcrumbNode] : []),
+		...schema,
+	],
+};
 ---
 
 <!doctype html>
@@ -49,7 +111,6 @@ const ogImageURL = new URL(image, Astro.site);
 		<link rel="canonical" href={canonicalURL} />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
-		<meta name="keywords" content={keywords} />
 		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
 		<meta name="author" content="GFR Calculator" />
 		<meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
@@ -74,6 +135,11 @@ const ogImageURL = new URL(image, Astro.site);
 		<meta name="twitter:image:alt" content="GFR Calculator — free online eGFR and kidney function calculator" />
 
 		<title>{title}</title>
+
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+		<link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
+		<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 
 		<!-- Google AdSense -->
 		<script

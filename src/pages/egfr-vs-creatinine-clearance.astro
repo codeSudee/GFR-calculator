@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
+
+const title = 'eGFR vs Creatinine Clearance: Differences and When Each Is Used';
+const description =
+	'How eGFR (CKD-EPI, MDRD) differs from Cockcroft-Gault creatinine clearance: units, body surface area indexing, weight, drug dosing, and how to convert between them.';
+---
+
+<Layout
+	title={title}
+	description={description}
+	modified="2026-10-23"
+	breadcrumbs={[{ name: 'eGFR vs Creatinine Clearance', href: '/egfr-vs-creatinine-clearance' }]}
+	schema={[
+		{
+			'@type': 'Article',
+			headline: title,
+			description,
+			mainEntityOfPage: { '@id': 'https://gfrcalc.com/egfr-vs-creatinine-clearance#webpage' },
+			dateModified: '2026-10-23',
+			datePublished: '2026-10-23',
+			author: { '@id': 'https://gfrcalc.com/#organization' },
+			publisher: { '@id': 'https://gfrcalc.com/#organization' },
+			image: 'https://gfrcalc.com/og-image.png',
+		},
+	]}
+>
+	<article class="container-page py-14 sm:py-20">
+		<div class="mx-auto max-w-2xl">
+			<Breadcrumbs trail={[{ name: 'eGFR vs Creatinine Clearance' }]} />
+			<h1 class="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+				eGFR vs creatinine clearance
+			</h1>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Both numbers estimate how well the kidneys filter blood from a serum creatinine result,
+				but they are calculated differently, reported in different units, and used for
+				different jobs. Mixing them up is one of the most common errors when reading a kidney
+				function result.
+			</p>
+			<p class="mt-3 text-sm text-faint">Last updated October 23, 2026</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Side-by-side comparison</h2>
+			<div class="mt-4 overflow-x-auto rounded-md border border-hairline">
+				<table class="w-full text-left text-sm">
+					<caption class="sr-only">Comparison of eGFR and creatinine clearance</caption>
+					<thead>
+						<tr class="border-b border-hairline bg-hairline-soft">
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink"></th>
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">eGFR (CKD-EPI, MDRD)</th>
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">Creatinine clearance (Cockcroft-Gault)</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-hairline align-top">
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Unit</th><td class="px-4 py-2.5 text-body">mL/min/1.73m&sup2;</td><td class="px-4 py-2.5 text-body">mL/min</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Inputs</th><td class="px-4 py-2.5 text-body">Creatinine, age, sex</td><td class="px-4 py-2.5 text-body">Creatinine, age, sex, body weight</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Body size</th><td class="px-4 py-2.5 text-body">Indexed to a standard 1.73m&sup2; body surface area</td><td class="px-4 py-2.5 text-body">Not indexed; scales with weight</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Main use</th><td class="px-4 py-2.5 text-body">Detecting and staging CKD</td><td class="px-4 py-2.5 text-body">Drug dosing where labels specify CrCl</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Staging</th><td class="px-4 py-2.5 text-body">Maps to KDIGO <a href="/ckd-stages" class="text-link hover:text-link-deep">G1&ndash;G5</a></td><td class="px-4 py-2.5 text-body">Not used for G-staging</td></tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Why the body surface area matters</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				eGFR is expressed per 1.73m&sup2; of body surface area (BSA), the BSA of an average adult.
+				That makes results comparable between people of different sizes, which suits CKD
+				screening. A large person simply has more kidney tissue and a larger absolute filtration
+				rate, so for dosing, the absolute figure is often more relevant. To convert an indexed
+				eGFR to an absolute value for a given patient:
+			</p>
+			<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR (mL/min) = eGFR (mL/min/1.73m&sup2;) &times; patient BSA (m&sup2;) / 1.73</pre>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				For a person with a BSA of 2.0 m&sup2; and an indexed eGFR of 60, the absolute value is
+				60 &times; 2.0 / 1.73 &asymp; 69 mL/min. Errors in this step were one cause of faulty results
+				in the online calculators reviewed in the
+				<a href="/methodology" class="text-link hover:text-link-deep">2020 accuracy study</a> behind
+				this site.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Which should be used for drug dosing?</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Many drug labels and dosing guidelines were developed using Cockcroft-Gault creatinine
+				clearance, so it remains widely cited for dose adjustment. Regulators and kidney
+				organizations also accept eGFR-based dosing in many situations, particularly when the
+				patient is close to average size. Which to use depends on the specific drug and on
+				the patient's weight, so follow the product label and ask a pharmacist or prescriber.
+				This site does not give dosing advice.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Limits of both</h2>
+			<ul class="mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-body">
+				<li>Both rely on serum creatinine, which depends on muscle mass and diet.</li>
+				<li>Cockcroft-Gault is less accurate in obesity, extremes of body weight, and rapidly changing kidney function.</li>
+				<li>Neither is valid during acute kidney injury, when creatinine has not reached a steady state.</li>
+				<li>Neither is designed for children. Pediatric estimates use the bedside Schwartz equation.</li>
+			</ul>
+
+			<p class="mt-8 text-base leading-relaxed text-body">
+				You can compute both on the <a href="/" class="text-link hover:text-link-deep">GFR calculator</a>;
+				each result shows its unit and the working behind it.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Sources</h2>
+			<ul class="mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-body">
+				<li>Cockcroft DW, Gault MH. Prediction of creatinine clearance from serum creatinine. <em>Nephron</em>. 1976;16:31&ndash;41.</li>
+				<li>Inker LA, et al. <em>N Engl J Med</em>. 2021;385:1737&ndash;1749.</li>
+				<li>Seiberth J, et al. Accuracy of freely available online GFR calculators using the CKD-EPI equation. <em>Eur J Clin Pharmacol</em>. 2020.</li>
+			</ul>
+
+			<div class="mt-12"><MedicalDisclaimer /></div>
+			<RelatedLinks exclude="/egfr-vs-creatinine-clearance" />
+		</div>
+	</article>
+</Layout>

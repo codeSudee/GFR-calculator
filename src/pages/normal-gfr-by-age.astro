@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
+
+const title = 'Normal GFR by Age: Average eGFR Chart for Adults';
+const description =
+	'What is a normal GFR for your age? Average GFR values by decade from 20 to 70+, why kidney filtration declines with age, and how to read your own eGFR result.';
+---
+
+<Layout
+	title={title}
+	description={description}
+	modified="2026-10-23"
+	breadcrumbs={[{ name: 'Normal GFR by Age', href: '/normal-gfr-by-age' }]}
+	schema={[
+		{
+			'@type': 'Article',
+			headline: title,
+			description,
+			mainEntityOfPage: { '@id': 'https://gfrcalc.com/normal-gfr-by-age#webpage' },
+			dateModified: '2026-10-23',
+			datePublished: '2026-10-23',
+			author: { '@id': 'https://gfrcalc.com/#organization' },
+			publisher: { '@id': 'https://gfrcalc.com/#organization' },
+			image: 'https://gfrcalc.com/og-image.png',
+		},
+	]}
+>
+	<article class="container-page py-14 sm:py-20">
+		<div class="mx-auto max-w-2xl">
+			<Breadcrumbs trail={[{ name: 'Normal GFR by Age' }]} />
+			<h1 class="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+				Normal GFR by age
+			</h1>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Glomerular filtration rate falls gradually as people age, so a "normal" GFR depends on
+				how old you are. The table below shows commonly cited average values for adults. Use it
+				for context alongside your own result from the
+				<a href="/" class="text-link hover:text-link-deep">GFR calculator</a>.
+			</p>
+			<p class="mt-3 text-sm text-faint">Last updated October 23, 2026</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Average GFR by age</h2>
+			<div class="mt-4 overflow-x-auto rounded-md border border-hairline">
+				<table class="w-full text-left text-sm">
+					<caption class="sr-only">Average GFR by age group, in mL/min/1.73m&sup2;</caption>
+					<thead>
+						<tr class="border-b border-hairline bg-hairline-soft">
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">Age (years)</th>
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">Average GFR (mL/min/1.73m&sup2;)</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-hairline">
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">20&ndash;29</th><td class="px-4 py-2.5 text-body">116</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">30&ndash;39</th><td class="px-4 py-2.5 text-body">107</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">40&ndash;49</th><td class="px-4 py-2.5 text-body">99</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">50&ndash;59</th><td class="px-4 py-2.5 text-body">93</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">60&ndash;69</th><td class="px-4 py-2.5 text-body">85</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">70+</th><td class="px-4 py-2.5 text-body">75</td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="mt-3 text-sm text-faint">
+				Values are population averages as published by the National Kidney Foundation, not
+				pass/fail cut-offs. Individual healthy values vary widely around these averages.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Why GFR declines with age</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				After about age 30 to 40, GFR falls on average by roughly 1 mL/min/1.73m&sup2; per year.
+				The kidneys lose some functioning nephrons over time, and blood vessels stiffen. The
+				rate of decline differs greatly between people. Diabetes, high blood pressure, obesity,
+				smoking, and some medicines speed it up.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Is a lower GFR at an older age still a problem?</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				An eGFR in the 60s is common in people over 65 and is not always accompanied by kidney
+				damage. Guidelines still classify an eGFR below 60 for more than three months as
+				<a href="/ckd-stages" class="text-link hover:text-link-deep">CKD stage G3 or worse</a>
+				regardless of age, because the risk of complications rises with lower GFR. How much that
+				matters for an individual depends on albuminuria, the trend over time, and other health
+				conditions, which is a conversation for a clinician.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Other things that affect your result</h2>
+			<ul class="mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-body">
+				<li><strong>Muscle mass.</strong> Creatinine comes from muscle, so very muscular people can look worse than they are and people with low muscle mass can look better.</li>
+				<li><strong>Diet and hydration.</strong> A large cooked-meat meal or dehydration can raise creatinine temporarily.</li>
+				<li><strong>Sex.</strong> Equations use different constants for male and female creatinine levels.</li>
+				<li><strong>Equation choice.</strong> CKD-EPI 2021, CKD-EPI 2009, and MDRD can give different numbers for the same person. See our <a href="/methodology" class="text-link hover:text-link-deep">methodology</a>.</li>
+			</ul>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Sources</h2>
+			<ul class="mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-body">
+				<li>National Kidney Foundation, <em>Estimated Glomerular Filtration Rate (eGFR)</em> patient resource.</li>
+				<li>KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of CKD. <em>Kidney International</em>. 2024;105(4S):S117&ndash;S314.</li>
+			</ul>
+
+			<div class="mt-12"><MedicalDisclaimer /></div>
+			<RelatedLinks exclude="/normal-gfr-by-age" />
+		</div>
+	</article>
+</Layout>
