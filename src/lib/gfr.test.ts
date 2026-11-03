@@ -8,6 +8,11 @@ import {
   calculateCkdEpi2009,
   calculateMdrd,
   calculateCockcroftGault,
+  calculateCkdEpiCystatin2012,
+  calculateCkdEpiCrCys2021,
+  calculateBedsideSchwartz,
+  idealBodyWeightKg,
+  adjustedBodyWeightKg,
 } from "./gfr";
 
 describe("unit conversion", () => {
@@ -213,5 +218,58 @@ describe("cross-formula sanity checks", () => {
     expect(["G4", "G5"]).toContain(calculateCkdEpi2021(inputs).stage.stage);
     expect(["G4", "G5"]).toContain(calculateCkdEpi2009(inputs).stage.stage);
     expect(["G4", "G5"]).toContain(calculateMdrd(inputs).stage.stage);
+  });
+});
+
+// Reference values below were computed independently of this module, from the
+// published equations, in a separate Python script.
+describe("CKD-EPI 2012 cystatin C", () => {
+  it("matches reference values on both sides of the 0.8 mg/L knot", () => {
+    expect(calculateCkdEpiCystatin2012({ cystatinC: 1.0, age: 50, sex: "male" }).egfr).toBeCloseTo(80.9, 1);
+    expect(calculateCkdEpiCystatin2012({ cystatinC: 0.7, age: 40, sex: "female" }).egfr).toBeCloseTo(112.9, 1);
+    expect(calculateCkdEpiCystatin2012({ cystatinC: 1.5, age: 70, sex: "female" }).egfr).toBeCloseTo(40.6, 1);
+  });
+});
+
+describe("CKD-EPI 2021 creatinine-cystatin C", () => {
+  it("matches reference values for both sexes", () => {
+    const cr = { creatinineUnit: "mg/dL" as const };
+    expect(calculateCkdEpiCrCys2021({ ...cr, creatinine: 1, cystatinC: 1, age: 50, sex: "male" }).egfr).toBeCloseTo(88.1, 1);
+    expect(calculateCkdEpiCrCys2021({ ...cr, creatinine: 0.6, cystatinC: 0.7, age: 40, sex: "female" }).egfr).toBeCloseTo(120.1, 1);
+    expect(calculateCkdEpiCrCys2021({ ...cr, creatinine: 1.5, cystatinC: 1.5, age: 70, sex: "female" }).egfr).toBeCloseTo(40.1, 1);
+  });
+
+  it("gives the same answer for equivalent creatinine units", () => {
+    const base = { cystatinC: 1, age: 50, sex: "male" as const };
+    expect(calculateCkdEpiCrCys2021({ ...base, creatinine: 88.4, creatinineUnit: "umol/L" }).egfr).toBe(
+      calculateCkdEpiCrCys2021({ ...base, creatinine: 1, creatinineUnit: "mg/dL" }).egfr,
+    );
+  });
+});
+
+describe("Bedside Schwartz", () => {
+  it("applies 0.413 x height / creatinine", () => {
+    expect(calculateBedsideSchwartz({ heightCm: 120, creatinine: 0.5, creatinineUnit: "mg/dL" }).egfr).toBeCloseTo(99.1, 1);
+    expect(calculateBedsideSchwartz({ heightCm: 100, creatinine: 0.4, creatinineUnit: "mg/dL" }).egfr).toBeCloseTo(103.2, 1);
+  });
+
+  it("converts umol/L before applying the equation", () => {
+    expect(calculateBedsideSchwartz({ heightCm: 120, creatinine: 44.2, creatinineUnit: "umol/L" }).egfr).toBeCloseTo(99.1, 1);
+  });
+});
+
+describe("body weight helpers", () => {
+  it("computes Devine ideal body weight", () => {
+    expect(idealBodyWeightKg(175, "male")).toBeCloseTo(70.46, 2);
+    expect(idealBodyWeightKg(160, "female")).toBeCloseTo(52.38, 2);
+    expect(idealBodyWeightKg(152.4, "male")).toBeCloseTo(50, 6);
+  });
+
+  it("returns null below 5 feet instead of extrapolating", () => {
+    expect(idealBodyWeightKg(150, "female")).toBeNull();
+  });
+
+  it("computes adjusted body weight", () => {
+    expect(adjustedBodyWeightKg(100, 70)).toBeCloseTo(82, 6);
   });
 });

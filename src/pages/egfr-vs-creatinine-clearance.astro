@@ -4,9 +4,9 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 
-const title = 'eGFR vs Creatinine Clearance: Differences and When Each Is Used';
+const title = 'eGFR vs Creatinine Clearance: Key Differences and Uses';
 const description =
-	'How eGFR (CKD-EPI, MDRD) differs from Cockcroft-Gault creatinine clearance: units, body surface area indexing, weight, drug dosing, and how to convert between them.';
+	'How eGFR differs from Cockcroft-Gault creatinine clearance: units, body surface area indexing, weight, drug dosing, and how to convert between them.';
 ---
 
 <Layout
@@ -111,7 +111,7 @@ const description =
 			</ul>
 
 			<div class="mt-12"><MedicalDisclaimer /></div>
-			<RelatedLinks exclude="/egfr-vs-creatinine-clearance" />
+			<RelatedLinks only={['/creatinine-clearance-calculator', '/', '/ckd-epi-calculator', '/methodology']} />
 		</div>
 	</article>
 </Layout>

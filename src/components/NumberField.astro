@@ -1,0 +1,46 @@
+---
+/** Labelled number input with an optional unit select, hint, and error slot. Pairs with readNumber(). */
+interface Props {
+	id: string;
+	label: string;
+	placeholder: string;
+	step?: string;
+	unit?: string;
+	unitOptions?: { value: string; label: string }[];
+	unitName?: string;
+	hint?: string;
+	wide?: boolean;
+	required?: boolean;
+}
+
+const { id, label, placeholder, step = 'any', unit, unitOptions, unitName, hint, wide = false, required = true } = Astro.props;
+---
+
+<div class:list={{ 'sm:col-span-2': wide }}>
+	<label for={id} class="block text-sm font-medium text-ink">{label}</label>
+	<div class="mt-1.5 flex rounded-sm border border-hairline bg-canvas-elevated focus-within:ring-2 focus-within:ring-link/40">
+		<input
+			type="number"
+			id={id}
+			name={id}
+			inputmode="decimal"
+			step={step}
+			min="0"
+			required={required}
+			autocomplete="off"
+			aria-describedby={`${id}-error`}
+			placeholder={placeholder}
+			class="w-full min-w-0 flex-1 rounded-l-sm border-0 bg-transparent px-3 py-2 text-base text-ink outline-none placeholder:text-faint sm:text-sm"
+		/>
+		{unit && <span class="flex items-center px-3 text-sm text-mute">{unit}</span>}
+		{
+			unitOptions && (
+				<select name={unitName} aria-label={`${label} unit`} class="rounded-r-sm border-l border-hairline bg-transparent px-2 text-sm text-ink">
+					{unitOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+				</select>
+			)
+		}
+	</div>
+	<p id={`${id}-error`} class="mt-1 min-h-[1rem] text-xs text-error" aria-live="polite"></p>
+	{hint && <p class="mt-1 text-xs text-faint">{hint}</p>}
+</div>

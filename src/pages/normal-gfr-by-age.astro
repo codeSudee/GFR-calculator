@@ -4,15 +4,15 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 
-const title = 'Normal GFR by Age: Average eGFR Chart for Adults';
+const title = 'Normal GFR by Age Chart: eGFR Normal Range for Adults';
 const description =
-	'What is a normal GFR for your age? Average GFR values by decade from 20 to 70+, why kidney filtration declines with age, and how to read your own eGFR result.';
+	'A normal eGFR is usually above 90. Average eGFR falls from 116 at ages 20-29 to 75 at age 70+. See the full chart by age and what a lower number can mean.';
 ---
 
 <Layout
 	title={title}
 	description={description}
-	modified="2026-10-23"
+	modified="2026-11-03"
 	breadcrumbs={[{ name: 'Normal GFR by Age', href: '/normal-gfr-by-age' }]}
 	schema={[
 		{
@@ -20,7 +20,7 @@ const description =
 			headline: title,
 			description,
 			mainEntityOfPage: { '@id': 'https://gfrcalc.com/normal-gfr-by-age#webpage' },
-			dateModified: '2026-10-23',
+			dateModified: '2026-11-03',
 			datePublished: '2026-10-23',
 			author: { '@id': 'https://gfrcalc.com/#organization' },
 			publisher: { '@id': 'https://gfrcalc.com/#organization' },
@@ -32,15 +32,16 @@ const description =
 		<div class="mx-auto max-w-2xl">
 			<Breadcrumbs trail={[{ name: 'Normal GFR by Age' }]} />
 			<h1 class="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-				Normal GFR by age
+				Normal GFR by age: eGFR normal range chart
 			</h1>
 			<p class="mt-4 text-base leading-relaxed text-body">
-				Glomerular filtration rate falls gradually as people age, so a "normal" GFR depends on
-				how old you are. The table below shows commonly cited average values for adults. Use it
+				A normal eGFR for adults is usually above 90 mL/min/1.73m&sup2;, and it falls gradually with
+				age. On average it is about 116 in your 20s, 99 in your 40s, 85 in your 60s, and 75 from age 70.
+				An eGFR below 60 for more than three months meets the definition of CKD at any age. Use it
 				for context alongside your own result from the
 				<a href="/" class="text-link hover:text-link-deep">GFR calculator</a>.
 			</p>
-			<p class="mt-3 text-sm text-faint">Last updated October 23, 2026</p>
+			<p class="mt-3 text-sm text-faint">Last updated November 3, 2026</p>
 
 			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Average GFR by age</h2>
 			<div class="mt-4 overflow-x-auto rounded-md border border-hairline">
@@ -95,12 +96,12 @@ const description =
 
 			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Sources</h2>
 			<ul class="mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-body">
-				<li>National Kidney Foundation, <em>Estimated Glomerular Filtration Rate (eGFR)</em> patient resource.</li>
+				<li><a href="https://www.kidney.org/kidney-topics/estimated-glomerular-filtration-rate-egfr" target="_blank" rel="noopener noreferrer" class="text-link hover:text-link-deep">National Kidney Foundation: Estimated Glomerular Filtration Rate (eGFR)</a>.</li>
 				<li>KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of CKD. <em>Kidney International</em>. 2024;105(4S):S117&ndash;S314.</li>
 			</ul>
 
 			<div class="mt-12"><MedicalDisclaimer /></div>
-			<RelatedLinks exclude="/normal-gfr-by-age" />
+			<RelatedLinks only={['/egfr-results', '/', '/ckd-stages', '/egfr-blood-test']} />
 		</div>
 	</article>
 </Layout>

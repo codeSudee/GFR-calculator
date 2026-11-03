@@ -1,0 +1,104 @@
+---
+import GuidePage from '../components/GuidePage.astro';
+import NumberField from '../components/NumberField.astro';
+
+const creatinineUnits = [
+	{ value: 'mg/dL', label: 'mg/dL' },
+	{ value: 'umol/L', label: 'µmol/L' },
+];
+const heightUnits = [
+	{ value: 'cm', label: 'cm' },
+	{ value: 'in', label: 'in' },
+];
+---
+
+<GuidePage
+	title="Pediatric GFR Calculator: Bedside Schwartz Equation"
+	description="Estimate GFR in children from height and serum creatinine with the bedside Schwartz equation (0.413 × height ÷ creatinine). Includes a worked example."
+	h1="Pediatric GFR calculator (bedside Schwartz)"
+	path="/pediatric-gfr-calculator"
+	crumb="Pediatric GFR Calculator"
+	kind="tool"
+	modified="2026-11-03"
+	related={['/', '/ckd-stages', '/creatinine-converter', '/methodology']}
+>
+	<Fragment slot="intro">
+		<p>
+			Adult equations such as CKD-EPI should not be used for children. The bedside Schwartz equation
+			estimates GFR in children from just two numbers: height and serum creatinine. It was developed
+			in children aged 1 to 16 with chronic kidney disease.
+		</p>
+	</Fragment>
+
+	<div slot="tool" class="rounded-lg border border-hairline bg-canvas-elevated p-4 sm:p-6">
+		<form id="ped-form" class="grid gap-5 sm:grid-cols-2" novalidate>
+			<NumberField id="height" label="Child's height" placeholder="120" unitOptions={heightUnits} unitName="height-unit" />
+			<NumberField id="creatinine" label="Serum creatinine" placeholder="0.50" unitOptions={creatinineUnits} unitName="creatinine-unit" />
+			<div class="sm:col-span-2">
+				<button type="submit" class="w-full rounded-pill bg-ink px-6 py-2.5 text-sm font-medium text-canvas transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link sm:w-auto">
+					Calculate pediatric eGFR
+				</button>
+			</div>
+		</form>
+		<div id="result-region" aria-live="polite"></div>
+	</div>
+
+	<h2>The bedside Schwartz equation</h2>
+	<pre>eGFR (mL/min/1.73m²) = 0.413 × Height (cm) / Serum creatinine (mg/dL)</pre>
+
+	<h3>Worked example</h3>
+	<p>
+		A child 128 cm tall with a serum creatinine of 0.5 mg/dL: 0.413 × 128 = 52.86, and
+		52.86 ÷ 0.5 = <strong>105.7 mL/min/1.73m²</strong>.
+	</p>
+
+	<h2>Limits of this equation</h2>
+	<ul>
+		<li><strong>Age.</strong> The equation came from children aged 1 to 16. It is not for infants under 1 year, and other equations may suit older teenagers better.</li>
+		<li><strong>Normal kidney function.</strong> The study population had CKD. Its authors called for more validation in children with higher GFR before using it to screen all children.</li>
+		<li><strong>Lab method.</strong> The 0.413 constant assumes IDMS-traceable creatinine, the method most labs now use. The older Schwartz constant of 0.55 belongs to older assays, so do not mix the two.</li>
+		<li><strong>Stable creatinine.</strong> Like other estimates, it is unreliable when kidney function is changing quickly.</li>
+	</ul>
+
+	<h2>Reading a child's result</h2>
+	<p>
+		The result uses the same units as adult eGFR, and the
+		<a href="/ckd-stages">KDIGO G1 to G5 categories</a> are applied from age 2. GFR is naturally lower in
+		very young children and reaches adult levels at around age 2, so results for toddlers and infants
+		need a pediatric specialist's reading. Discuss any result with your child's doctor.
+	</p>
+
+	<h2>Sources</h2>
+	<ul>
+		<li>Schwartz GJ, et al. New equations to estimate GFR in children with CKD. <em>J Am Soc Nephrol</em>. 2009;20:629&ndash;637. <a href="https://pubmed.ncbi.nlm.nih.gov/19158356/" target="_blank" rel="noopener noreferrer">PubMed</a>.</li>
+		<li>KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of CKD. <em>Kidney International</em>. 2024;105(4S):S117&ndash;S314.</li>
+	</ul>
+</GuidePage>
+
+<script>
+	import { calculateBedsideSchwartz, type CreatinineUnit } from '../lib/gfr';
+	import { readChoice, readNumber, resultHtml } from '../lib/result-html';
+
+	const form = document.getElementById('ped-form');
+	const region = document.getElementById('result-region');
+
+	form?.addEventListener('submit', (e) => {
+		e.preventDefault();
+		if (!region) return;
+		const inches = readChoice<string>('height-unit') === 'in';
+		const height = readNumber('height', inches ? 16 : 40, inches ? 83 : 210, inches ? 'Enter a height between 16 and 83 in.' : 'Enter a height between 40 and 210 cm.');
+		const creatinine = readNumber('creatinine', 0.01, 3000, 'Enter a creatinine value greater than 0.');
+		if (height === null || creatinine === null) {
+			region.innerHTML = '';
+			return;
+		}
+		region.innerHTML = resultHtml(
+			calculateBedsideSchwartz({
+				heightCm: inches ? height * 2.54 : height,
+				creatinine,
+				creatinineUnit: readChoice<CreatinineUnit>('creatinine-unit'),
+			}),
+		);
+		region.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+	});
+</script>

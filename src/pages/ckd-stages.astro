@@ -4,15 +4,15 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 
-const title = 'CKD Stages by GFR: KDIGO G1–G5 and Albuminuria Categories';
+const title = 'CKD Stages Chart: eGFR Ranges for Stage 1 to Stage 5';
 const description =
-	'Chronic kidney disease stages explained: the KDIGO GFR categories G1 to G5, albuminuria categories A1 to A3, what each eGFR range means, and how CKD is diagnosed.';
+	'CKD stages by eGFR: stage 1 (90+), 2 (60-89), 3a (45-59), 3b (30-44), 4 (15-29), and 5 (under 15). What each stage means, plus how CKD is diagnosed.';
 ---
 
 <Layout
 	title={title}
 	description={description}
-	modified="2026-10-23"
+	modified="2026-11-03"
 	breadcrumbs={[{ name: 'CKD Stages', href: '/ckd-stages' }]}
 	schema={[
 		{
@@ -20,7 +20,7 @@ const description =
 			headline: title,
 			description,
 			mainEntityOfPage: { '@id': 'https://gfrcalc.com/ckd-stages#webpage' },
-			dateModified: '2026-10-23',
+			dateModified: '2026-11-03',
 			datePublished: '2026-10-23',
 			author: { '@id': 'https://gfrcalc.com/#organization' },
 			publisher: { '@id': 'https://gfrcalc.com/#organization' },
@@ -32,19 +32,21 @@ const description =
 		<div class="mx-auto max-w-2xl">
 			<Breadcrumbs trail={[{ name: 'CKD Stages' }]} />
 			<h1 class="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-				CKD stages by GFR: the KDIGO classification
+				CKD stages chart: eGFR ranges for stages 1 to 5
 			</h1>
 			<p class="mt-4 text-base leading-relaxed text-body">
-				Chronic kidney disease (CKD) is classified using two measurements: the estimated
+				Chronic kidney disease (CKD) has five stages based on eGFR: stage 1 is 90 or above, stage 2 is
+				60&ndash;89, stage 3 is 30&ndash;59 (split into 3a and 3b), stage 4 is 15&ndash;29, and stage 5
+				is below 15. Doctors classify CKD using two measurements: the estimated
 				glomerular filtration rate (eGFR), which describes how well the kidneys filter blood, and
 				albuminuria, which describes how much albumin leaks into the urine. The KDIGO guideline
 				combines them into a "cause, GFR category, albuminuria category" system. This guide
 				explains each category. To get your own number, use the
 				<a href="/" class="text-link hover:text-link-deep">GFR calculator</a>.
 			</p>
-			<p class="mt-3 text-sm text-faint">Last updated October 23, 2026</p>
+			<p class="mt-3 text-sm text-faint">Last updated November 3, 2026</p>
 
-			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">GFR categories (G1 to G5)</h2>
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">CKD stages by eGFR (G1 to G5)</h2>
 			<p class="mt-4 text-base leading-relaxed text-body">
 				GFR categories are defined by eGFR in mL/min/1.73m&sup2;. Higher numbers mean better
 				filtration.
@@ -54,18 +56,18 @@ const description =
 					<caption class="sr-only">KDIGO GFR categories</caption>
 					<thead>
 						<tr class="border-b border-hairline bg-hairline-soft">
-							<th scope="col" class="px-4 py-2.5 font-medium text-ink">Category</th>
+							<th scope="col" class="px-4 py-2.5 font-medium text-ink">Stage</th>
 							<th scope="col" class="px-4 py-2.5 font-medium text-ink">eGFR (mL/min/1.73m&sup2;)</th>
 							<th scope="col" class="px-4 py-2.5 font-medium text-ink">Terms</th>
 						</tr>
 					</thead>
 					<tbody class="divide-y divide-hairline">
-						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G1</th><td class="px-4 py-2.5 text-body">&ge; 90</td><td class="px-4 py-2.5 text-body">Normal or high</td></tr>
-						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G2</th><td class="px-4 py-2.5 text-body">60&ndash;89</td><td class="px-4 py-2.5 text-body">Mildly decreased</td></tr>
-						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G3a</th><td class="px-4 py-2.5 text-body">45&ndash;59</td><td class="px-4 py-2.5 text-body">Mildly to moderately decreased</td></tr>
-						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G3b</th><td class="px-4 py-2.5 text-body">30&ndash;44</td><td class="px-4 py-2.5 text-body">Moderately to severely decreased</td></tr>
-						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G4</th><td class="px-4 py-2.5 text-body">15&ndash;29</td><td class="px-4 py-2.5 text-body">Severely decreased</td></tr>
-						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">G5</th><td class="px-4 py-2.5 text-body">&lt; 15</td><td class="px-4 py-2.5 text-body">Kidney failure</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Stage 1 (G1)</th><td class="px-4 py-2.5 text-body">&ge; 90</td><td class="px-4 py-2.5 text-body">Normal or high</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Stage 2 (G2)</th><td class="px-4 py-2.5 text-body">60&ndash;89</td><td class="px-4 py-2.5 text-body">Mildly decreased</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Stage 3a (G3a)</th><td class="px-4 py-2.5 text-body">45&ndash;59</td><td class="px-4 py-2.5 text-body">Mildly to moderately decreased</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Stage 3b (G3b)</th><td class="px-4 py-2.5 text-body">30&ndash;44</td><td class="px-4 py-2.5 text-body">Moderately to severely decreased</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Stage 4 (G4)</th><td class="px-4 py-2.5 text-body">15&ndash;29</td><td class="px-4 py-2.5 text-body">Severely decreased</td></tr>
+						<tr><th scope="row" class="px-4 py-2.5 font-medium text-ink">Stage 5 (G5)</th><td class="px-4 py-2.5 text-body">&lt; 15</td><td class="px-4 py-2.5 text-body">Kidney failure</td></tr>
 					</tbody>
 				</table>
 			</div>
@@ -73,6 +75,14 @@ const description =
 				Note that G1 and G2 do not by themselves mean CKD. They count as CKD only when another
 				marker of kidney damage is present, such as albuminuria, urine sediment abnormalities,
 				structural abnormalities on imaging, or a kidney transplant.
+			</p>
+
+			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Stage 3 kidney disease: 3a and 3b</h2>
+			<p class="mt-4 text-base leading-relaxed text-body">
+				Stage 3 covers an eGFR of 30 to 59 lasting more than three months. It is split in two because
+				risk differs across the range: stage 3a is 45&ndash;59 and stage 3b is 30&ndash;44. Many people
+				at stage 3a have no symptoms and find out from a routine blood test. To see what a specific
+				number means, read <a href="/egfr-results" class="text-link hover:text-link-deep">what your eGFR number means</a>.
 			</p>
 
 			<h2 class="mt-12 text-xl font-semibold tracking-tight text-ink">Albuminuria categories (A1 to A3)</h2>
@@ -136,7 +146,7 @@ const description =
 			</ul>
 
 			<div class="mt-12"><MedicalDisclaimer /></div>
-			<RelatedLinks exclude="/ckd-stages" />
+			<RelatedLinks only={['/egfr-results', '/', '/normal-gfr-by-age', '/how-to-improve-gfr']} />
 		</div>
 	</article>
 </Layout>

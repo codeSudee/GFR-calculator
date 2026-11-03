@@ -6,7 +6,7 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 
 const title = 'Creatinine Converter: mg/dL to µmol/L (and Back)';
 const description =
-	'Free serum creatinine unit converter. Convert mg/dL to µmol/L and µmol/L to mg/dL using the standard 88.4 factor, with typical reference ranges and worked examples.';
+	'Convert serum creatinine from mg/dL to µmol/L and back using the standard 88.4 factor, with typical reference ranges and worked examples.';
 ---
 
 <Layout
@@ -108,7 +108,7 @@ mg/dL = &micro;mol/L &divide; 88.4</pre>
 			</p>
 
 			<div class="mt-12"><MedicalDisclaimer /></div>
-			<RelatedLinks exclude="/creatinine-converter" />
+			<RelatedLinks only={['/', '/creatinine-clearance-calculator', '/egfr-blood-test', '/methodology']} />
 		</div>
 	</article>
 </Layout>

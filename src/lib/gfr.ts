@@ -29,6 +29,8 @@
 export type Sex = "male" | "female";
 export type CreatinineUnit = "mg/dL" | "umol/L";
 export type FormulaId = "ckd-epi-2021" | "ckd-epi-2009" | "mdrd" | "cockcroft-gault";
+/** Equations with their own inputs, served by dedicated tool pages rather than the main tabs. */
+export type SpecialtyFormulaId = "ckd-epi-cystatin-2012" | "ckd-epi-cr-cys-2021" | "bedside-schwartz";
 
 export const MGDL_TO_UMOLL = 88.4;
 
@@ -143,7 +145,7 @@ export interface StepLine {
 }
 
 export interface GfrResult {
-  formula: FormulaId;
+  formula: FormulaId | SpecialtyFormulaId;
   formulaName: string;
   egfr: number;
   unit: string;
@@ -431,6 +433,158 @@ export function calculateCockcroftGault(inputs: CalculatorInputs): GfrResult {
       "Cockcroft-Gault estimates creatinine clearance in mL/min, not mL/min/1.73m\u00b2. It is not body-surface-area normalized and is primarily used for drug dosing, not general CKD staging. The G1\u2013G5 label shown is for reference only and should be interpreted cautiously alongside a normalized eGFR.",
     ],
   };
+}
+
+export interface CystatinInputs {
+  /** Standardized serum cystatin C in mg/L. */
+  cystatinC: number;
+  age: number;
+  sex: Sex;
+}
+
+/**
+ * CKD-EPI 2012 cystatin C equation (eGFRcys). Does not use race or creatinine.
+ * eGFR = 133 * min(Scys/0.8,1)^-0.499 * max(Scys/0.8,1)^-1.328 * 0.996^Age * 0.932 [if female]
+ * Source: Inker LA et al. N Engl J Med. 2012;367:20-29.
+ */
+export function calculateCkdEpiCystatin2012(inputs: CystatinInputs): GfrResult {
+  const { cystatinC, age, sex } = inputs;
+  const sexFactor = sex === "female" ? 0.932 : 1;
+  const ratio = cystatinC / 0.8;
+  const minTerm = Math.min(ratio, 1) ** -0.499;
+  const maxTerm = Math.max(ratio, 1) ** -1.328;
+  const ageTerm = 0.996 ** age;
+  const egfr = 133 * minTerm * maxTerm * ageTerm * sexFactor;
+
+  return {
+    formula: "ckd-epi-cystatin-2012",
+    formulaName: "CKD-EPI 2012 cystatin C (eGFRcys)",
+    egfr: round(egfr),
+    unit: "mL/min/1.73m²",
+    stage: classifyCkdStage(egfr),
+    steps: [
+      { label: "Compute Scys / 0.8", expression: `${fmt(cystatinC)} ÷ 0.8 = ${fmt(ratio, 4)}` },
+      { label: "min(Scys/0.8, 1)^-0.499", expression: `min(${fmt(ratio, 4)}, 1)^-0.499 = ${fmt(minTerm, 4)}` },
+      { label: "max(Scys/0.8, 1)^-1.328", expression: `max(${fmt(ratio, 4)}, 1)^-1.328 = ${fmt(maxTerm, 4)}` },
+      { label: "0.996^Age", expression: `0.996^${age} = ${fmt(ageTerm, 4)}` },
+      { label: "Sex factor", expression: sex === "female" ? "× 0.932 (female)" : "× 1 (male, no adjustment)" },
+      {
+        label: "eGFRcys",
+        expression: `133 × ${fmt(minTerm, 4)} × ${fmt(maxTerm, 4)} × ${fmt(ageTerm, 4)} × ${fmt(sexFactor, 3)}`,
+        result: `${fmt(egfr)} mL/min/1.73m²`,
+      },
+    ],
+  };
+}
+
+/**
+ * CKD-EPI 2021 creatinine-cystatin C equation (eGFRcr-cys), race-free.
+ * eGFR = 135 * min(Scr/κ,1)^α * max(Scr/κ,1)^-0.544 * min(Scys/0.8,1)^-0.323
+ *        * max(Scys/0.8,1)^-0.778 * 0.9961^Age * 0.963 [if female]
+ * κ = 0.7 (female) / 0.9 (male); α = -0.219 (female) / -0.144 (male)
+ * Source: Inker LA et al. N Engl J Med. 2021;385:1737-1749.
+ */
+export function calculateCkdEpiCrCys2021(inputs: CalculatorInputs & { cystatinC: number }): GfrResult {
+  const scr = toMgDl(inputs.creatinine, inputs.creatinineUnit);
+  const { cystatinC, age, sex } = inputs;
+  const kappa = sex === "female" ? 0.7 : 0.9;
+  const alpha = sex === "female" ? -0.219 : -0.144;
+  const sexFactor = sex === "female" ? 0.963 : 1;
+  const crRatio = scr / kappa;
+  const cysRatio = cystatinC / 0.8;
+  const crMin = Math.min(crRatio, 1) ** alpha;
+  const crMax = Math.max(crRatio, 1) ** -0.544;
+  const cysMin = Math.min(cysRatio, 1) ** -0.323;
+  const cysMax = Math.max(cysRatio, 1) ** -0.778;
+  const ageTerm = 0.9961 ** age;
+  const egfr = 135 * crMin * crMax * cysMin * cysMax * ageTerm * sexFactor;
+
+  return {
+    formula: "ckd-epi-cr-cys-2021",
+    formulaName: "CKD-EPI 2021 creatinine-cystatin C (eGFRcr-cys)",
+    egfr: round(egfr),
+    unit: "mL/min/1.73m²",
+    stage: classifyCkdStage(egfr),
+    steps: [
+      {
+        label: "Standardize serum creatinine (Scr) to mg/dL",
+        expression:
+          inputs.creatinineUnit === "mg/dL"
+            ? `Scr = ${fmt(inputs.creatinine)} mg/dL`
+            : `Scr = ${fmt(inputs.creatinine)} µmol/L ÷ ${MGDL_TO_UMOLL} = ${fmt(scr)} mg/dL`,
+      },
+      { label: "Select κ and α for sex", expression: `κ = ${kappa} (${sex}), α = ${alpha} (${sex})` },
+      { label: "Creatinine terms", expression: `min(${fmt(crRatio, 4)}, 1)^${alpha} = ${fmt(crMin, 4)}; max(${fmt(crRatio, 4)}, 1)^-0.544 = ${fmt(crMax, 4)}` },
+      { label: "Cystatin C terms", expression: `min(${fmt(cysRatio, 4)}, 1)^-0.323 = ${fmt(cysMin, 4)}; max(${fmt(cysRatio, 4)}, 1)^-0.778 = ${fmt(cysMax, 4)}` },
+      { label: "0.9961^Age", expression: `0.9961^${age} = ${fmt(ageTerm, 4)}` },
+      { label: "Sex factor", expression: sex === "female" ? "× 0.963 (female)" : "× 1 (male, no adjustment)" },
+      {
+        label: "eGFRcr-cys",
+        expression: `135 × ${fmt(crMin, 4)} × ${fmt(crMax, 4)} × ${fmt(cysMin, 4)} × ${fmt(cysMax, 4)} × ${fmt(ageTerm, 4)} × ${fmt(sexFactor, 3)}`,
+        result: `${fmt(egfr)} mL/min/1.73m²`,
+      },
+    ],
+  };
+}
+
+export interface SchwartzInputs {
+  heightCm: number;
+  creatinine: number;
+  creatinineUnit: CreatinineUnit;
+}
+
+/**
+ * Bedside Schwartz equation for children, using IDMS-traceable creatinine.
+ * eGFR = 0.413 * Height(cm) / Scr(mg/dL)
+ * Source: Schwartz GJ et al. J Am Soc Nephrol. 2009;20:629-637 (CKiD cohort, ages 1-16).
+ */
+export function calculateBedsideSchwartz(inputs: SchwartzInputs): GfrResult {
+  const scr = toMgDl(inputs.creatinine, inputs.creatinineUnit);
+  const egfr = (0.413 * inputs.heightCm) / scr;
+
+  return {
+    formula: "bedside-schwartz",
+    formulaName: "Bedside Schwartz (2009)",
+    egfr: round(egfr),
+    unit: "mL/min/1.73m²",
+    stage: classifyCkdStage(egfr),
+    steps: [
+      {
+        label: "Standardize serum creatinine (Scr) to mg/dL",
+        expression:
+          inputs.creatinineUnit === "mg/dL"
+            ? `Scr = ${fmt(inputs.creatinine)} mg/dL`
+            : `Scr = ${fmt(inputs.creatinine)} µmol/L ÷ ${MGDL_TO_UMOLL} = ${fmt(scr)} mg/dL`,
+      },
+      { label: "Multiply height by 0.413", expression: `0.413 × ${fmt(inputs.heightCm, 1)} cm = ${fmt(0.413 * inputs.heightCm, 3)}` },
+      {
+        label: "Divide by Scr",
+        expression: `${fmt(0.413 * inputs.heightCm, 3)} ÷ ${fmt(scr)}`,
+        result: `${fmt(egfr)} mL/min/1.73m²`,
+      },
+    ],
+    notes: [
+      "The bedside Schwartz equation was developed in children aged 1 to 16 with chronic kidney disease, using IDMS-traceable creatinine. It is less well validated in children with normal kidney function and should not be used in infants under 1 year. KDIGO GFR categories are not used in the same way for children under 2.",
+    ],
+  };
+}
+
+const CM_PER_INCH = 2.54;
+
+/**
+ * Devine ideal body weight in kg. Only defined for heights of 5 feet (152.4 cm) or more,
+ * so returns null below that rather than extrapolating.
+ * IBW = 50 kg (male) or 45.5 kg (female) + 2.3 kg per inch over 5 feet.
+ */
+export function idealBodyWeightKg(heightCm: number, sex: Sex): number | null {
+  const inchesOverFiveFeet = heightCm / CM_PER_INCH - 60;
+  if (inchesOverFiveFeet < 0) return null;
+  return (sex === "female" ? 45.5 : 50) + 2.3 * inchesOverFiveFeet;
+}
+
+/** Adjusted body weight in kg: IBW + 0.4 x (actual - IBW). */
+export function adjustedBodyWeightKg(actualKg: number, idealKg: number): number {
+  return idealKg + 0.4 * (actualKg - idealKg);
 }
 
 export const FORMULAS: Record<FormulaId, {

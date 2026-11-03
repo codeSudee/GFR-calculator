@@ -126,3 +126,22 @@
   margin-inline: auto;
   padding-inline: 1.5rem;
 }
+
+/* Long-form copy on tool and guide pages (GuidePage.astro). */
+@layer components {
+  .guide h2 { @apply mt-12 text-xl font-semibold tracking-tight text-ink; }
+  .guide h3 { @apply mt-6 text-base font-semibold text-ink; }
+  .guide p { @apply mt-4 text-base leading-relaxed text-body; }
+  .guide ul { @apply mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-body; }
+  .guide ol { @apply mt-4 list-decimal space-y-2 pl-5 text-base leading-relaxed text-body; }
+  .guide a { @apply text-link hover:text-link-deep; }
+  .guide strong { @apply font-semibold text-ink; }
+  .guide pre { @apply mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink; }
+  .guide .table-wrap { @apply mt-4 overflow-x-auto rounded-md border border-hairline; }
+  .guide table { @apply w-full text-left text-sm; }
+  .guide thead tr { @apply border-b border-hairline bg-hairline-soft; }
+  .guide tbody tr + tr { @apply border-t border-hairline; }
+  .guide th { @apply px-4 py-2.5 font-medium text-ink; }
+  .guide td { @apply px-4 py-2.5 text-body; }
+  .guide .note { @apply mt-3 text-sm text-faint; }
+}

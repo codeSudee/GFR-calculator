@@ -1,6 +1,11 @@
 ---
-import { FORMULAS } from '../lib/gfr';
+import { FORMULAS, type FormulaId } from '../lib/gfr';
 
+interface Props {
+	initialFormula?: FormulaId;
+}
+
+const { initialFormula = 'ckd-epi-2021' } = Astro.props;
 const formulaOrder = ['ckd-epi-2021', 'ckd-epi-2009', 'mdrd', 'cockcroft-gault'] as const;
 ---
 
@@ -9,18 +14,18 @@ const formulaOrder = ['ckd-epi-2021', 'ckd-epi-2009', 'mdrd', 'cockcroft-gault']
 	<div class="border-b border-hairline px-2 pt-2 sm:px-4">
 		<div role="tablist" aria-label="GFR formula" class="flex flex-wrap gap-1">
 			{
-				formulaOrder.map((id, i) => (
+				formulaOrder.map((id) => (
 					<button
 						type="button"
 						role="tab"
 						id={`tab-${id}`}
 						aria-controls="calculator-panel"
-						aria-selected={i === 0 ? 'true' : 'false'}
-						tabindex={i === 0 ? 0 : -1}
+						aria-selected={id === initialFormula ? 'true' : 'false'}
+						tabindex={id === initialFormula ? 0 : -1}
 						data-formula-tab={id}
 						class:list={[
 							'rounded-t-sm px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link',
-							i === 0 ? 'text-ink border-b-2 border-ink' : 'text-mute hover:text-ink border-b-2 border-transparent',
+							id === initialFormula ? 'text-ink border-b-2 border-ink' : 'text-mute hover:text-ink border-b-2 border-transparent',
 						]}
 					>
 						{FORMULAS[id].shortName}
@@ -30,9 +35,9 @@ const formulaOrder = ['ckd-epi-2021', 'ckd-epi-2009', 'mdrd', 'cockcroft-gault']
 		</div>
 	</div>
 
-	<div id="calculator-panel" role="tabpanel" aria-labelledby="tab-ckd-epi-2021" class="p-4 sm:p-6">
+	<div id="calculator-panel" role="tabpanel" aria-labelledby={`tab-${initialFormula}`} data-initial-formula={initialFormula} class="p-4 sm:p-6">
 		<p id="formula-description" class="mb-6 text-sm text-body">
-			{FORMULAS['ckd-epi-2021'].description}
+			{FORMULAS[initialFormula].description}
 		</p>
 
 		<form id="gfr-form" class="grid gap-5 sm:grid-cols-2" novalidate>
@@ -123,7 +128,7 @@ const formulaOrder = ['ckd-epi-2021', 'ckd-epi-2009', 'mdrd', 'cockcroft-gault']
 				<p class="mt-1 text-xs text-faint">Required by the formula; refers to biological sex, not gender identity.</p>
 			</div>
 
-			<div data-weight-field class="sm:col-span-2 hidden">
+			<div data-weight-field class:list={['sm:col-span-2', { hidden: !FORMULAS[initialFormula].requiresWeight }]}>
 				<label for="weight" class="block text-sm font-medium text-ink">Body weight</label>
 				<div class="mt-1.5 flex rounded-sm border border-hairline bg-canvas-elevated focus-within:ring-2 focus-within:ring-link/40">
 					<input

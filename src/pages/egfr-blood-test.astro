@@ -1,0 +1,90 @@
+---
+import GuidePage from '../components/GuidePage.astro';
+---
+
+<GuidePage
+	title="eGFR Blood Test: What It Measures and What Results Mean"
+	description="The eGFR blood test estimates kidney function from creatinine, age, and sex. Learn what GFR means, normal results, eGFR vs GFR, and what affects it."
+	h1="eGFR blood test: what it measures and what results mean"
+	path="/egfr-blood-test"
+	crumb="eGFR Blood Test"
+	kind="article"
+	modified="2026-11-03"
+	related={['/egfr-results', '/', '/normal-gfr-by-age', '/cystatin-c-gfr-calculator']}
+>
+	<Fragment slot="intro">
+		<p>
+			eGFR stands for estimated glomerular filtration rate. It is a number worked out from a routine
+			blood test that shows how well your kidneys filter waste. The lab measures creatinine in your
+			blood, then uses it with your age and sex in an equation to produce the result. A normal adult
+			eGFR is usually above 90.
+		</p>
+	</Fragment>
+
+	<h2>What does GFR mean?</h2>
+	<p>
+		Glomerular filtration rate is the volume of blood your kidneys filter each minute, adjusted to a
+		standard body size. The glomeruli are the tiny filters in each kidney. GFR is widely used as the
+		overall measure of kidney function.
+	</p>
+
+	<h2>eGFR vs GFR</h2>
+	<p>
+		True GFR can only be measured with a clearance test, in which a substance is injected and timed as
+		it leaves the blood. That is accurate but slow and invasive, so it is rarely used. eGFR estimates
+		the same value from a simple blood test, which is why it is on most lab reports. Your doctor may
+		ask for a measured GFR when getting the number exactly right would change your care.
+	</p>
+
+	<h2>How the test works</h2>
+	<ol>
+		<li>A sample of blood is taken from your arm. Creatinine is often part of a basic or comprehensive metabolic panel.</li>
+		<li>The lab measures your serum creatinine, and sometimes cystatin C.</li>
+		<li>An equation, usually CKD-EPI 2021 in the US, converts that value into an eGFR.</li>
+	</ol>
+	<p>
+		You can run the same calculation yourself with our <a href="/">GFR calculator</a> if your report
+		lists only creatinine. Follow your lab's instructions on preparation, because other tests in the
+		same panel may require fasting.
+	</p>
+
+	<h2>What is a normal eGFR?</h2>
+	<p>
+		A normal eGFR for adults is usually above 90 mL/min/1.73m². Averages fall with age, from about 116
+		in your 20s to about 75 at age 70 and over. See the full
+		<a href="/normal-gfr-by-age">normal GFR by age chart</a>. Some labs simply report "&gt;60" or "&gt;90"
+		rather than an exact figure. To understand a specific value, see
+		<a href="/egfr-results">what your eGFR number means</a>.
+	</p>
+
+	<h2>Who should get an eGFR test?</h2>
+	<p>Kidney disease often causes no symptoms early on, so testing is based on risk. It is especially relevant if you have:</p>
+	<ul>
+		<li>Diabetes</li>
+		<li>High blood pressure</li>
+		<li>Heart disease</li>
+		<li>A family history of kidney failure</li>
+	</ul>
+	<p>
+		It is usually paired with a urine albumin test, because kidney damage can show up in the urine
+		while eGFR is still normal.
+	</p>
+
+	<h2>What can affect your result</h2>
+	<ul>
+		<li><strong>Can lower eGFR:</strong> a lot of cooked meat before the test, creatine supplements, intense exercise, dehydration, high muscle mass, and certain medicines.</li>
+		<li><strong>Can raise eGFR:</strong> a vegan or vegetarian diet, low muscle mass, and pregnancy.</li>
+	</ul>
+	<p>
+		Because of these effects, one result is not a diagnosis. CKD requires changes that last more than
+		three months. If muscle mass or diet may be skewing your result, ask about a
+		<a href="/cystatin-c-gfr-calculator">cystatin C test</a>.
+	</p>
+
+	<h2>Sources</h2>
+	<ul>
+		<li><a href="https://www.kidney.org/kidney-topics/estimated-glomerular-filtration-rate-egfr" target="_blank" rel="noopener noreferrer">National Kidney Foundation: Estimated Glomerular Filtration Rate (eGFR)</a>.</li>
+		<li><a href="https://www.kidney.org/kidney-topics/can-my-gfr-get-better" target="_blank" rel="noopener noreferrer">National Kidney Foundation: Can my GFR get better?</a></li>
+		<li>KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of CKD. <em>Kidney International</em>. 2024;105(4S):S117&ndash;S314.</li>
+	</ul>
+</GuidePage>

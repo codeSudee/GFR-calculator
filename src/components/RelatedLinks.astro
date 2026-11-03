@@ -1,15 +1,27 @@
 ---
 const links = [
 	{ href: '/', title: 'GFR Calculator', text: 'Estimate eGFR with CKD-EPI, MDRD, or Cockcroft-Gault.' },
-	{ href: '/ckd-stages', title: 'CKD stages explained', text: 'KDIGO GFR and albuminuria categories.' },
-	{ href: '/normal-gfr-by-age', title: 'Normal GFR by age', text: 'Average GFR values by decade of life.' },
+	{ href: '/creatinine-clearance-calculator', title: 'Creatinine clearance calculator', text: 'Cockcroft-Gault with actual, ideal, and adjusted weight.' },
+	{ href: '/ckd-epi-calculator', title: 'CKD-EPI calculator', text: 'The 2021 race-free equation, with a worked example.' },
+	{ href: '/cystatin-c-gfr-calculator', title: 'Cystatin C GFR calculator', text: 'eGFRcys and combined eGFRcr-cys.' },
+	{ href: '/pediatric-gfr-calculator', title: 'Pediatric GFR calculator', text: 'Bedside Schwartz equation from height and creatinine.' },
+	{ href: '/egfr-results', title: 'What your eGFR number means', text: 'eGFR 90, 70, 60, 55, 45, 30, and 15 explained.' },
+	{ href: '/ckd-stages', title: 'CKD stages chart', text: 'eGFR ranges for stages 1 to 5, plus albuminuria.' },
+	{ href: '/normal-gfr-by-age', title: 'Normal GFR by age', text: 'Average eGFR values by decade of life.' },
+	{ href: '/how-to-improve-gfr', title: 'How to improve GFR', text: 'What can raise eGFR and what protects it.' },
+	{ href: '/egfr-blood-test', title: 'eGFR blood test', text: 'What the test measures and how to read it.' },
 	{ href: '/egfr-vs-creatinine-clearance', title: 'eGFR vs creatinine clearance', text: 'How the two measures differ and when each is used.' },
 	{ href: '/creatinine-converter', title: 'Creatinine converter', text: 'Convert mg/dL to µmol/L and back.' },
 	{ href: '/methodology', title: 'Methodology', text: 'Formulas, constants, and sources.' },
 ];
 
-const { exclude = '' } = Astro.props;
-const shown = links.filter((l) => l.href !== exclude);
+interface Props {
+	/** Hrefs to show, in order. */
+	only: string[];
+}
+
+const { only } = Astro.props;
+const shown = only.map((href) => links.find((l) => l.href === href)).filter((l) => l !== undefined);
 ---
 
 <aside aria-labelledby="related-heading" class="mt-14 border-t border-hairline pt-8">

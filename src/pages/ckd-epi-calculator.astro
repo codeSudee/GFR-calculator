@@ -1,0 +1,84 @@
+---
+import GuidePage from '../components/GuidePage.astro';
+import CalculatorIsland from '../components/CalculatorIsland.astro';
+---
+
+<GuidePage
+	title="CKD-EPI Calculator: 2021 eGFR Equation, Step by Step"
+	description="Calculate eGFR with the race-free CKD-EPI 2021 equation from creatinine, age, and sex. Compare it with CKD-EPI 2009 and MDRD, with a worked example."
+	h1="CKD-EPI calculator: the 2021 eGFR equation"
+	path="/ckd-epi-calculator"
+	crumb="CKD-EPI Calculator"
+	kind="tool"
+	modified="2026-11-03"
+	related={['/ckd-stages', '/egfr-results', '/cystatin-c-gfr-calculator', '/methodology']}
+>
+	<Fragment slot="intro">
+		<p>
+			CKD-EPI 2021 is the equation the National Kidney Foundation and American Society of Nephrology
+			recommend for estimating GFR in US adults. It needs only serum creatinine, age, and sex, and it
+			does not use race. Enter your values to see your eGFR and each step of the calculation.
+		</p>
+	</Fragment>
+
+	<CalculatorIsland slot="tool" initialFormula="ckd-epi-2021" />
+
+	<h2>The CKD-EPI 2021 equation</h2>
+	<pre>eGFR = 142 × min(Scr/κ, 1)^α × max(Scr/κ, 1)^−1.200 × 0.9938^Age × 1.012 [if female]
+
+Scr = serum creatinine in mg/dL
+κ = 0.7 (female), 0.9 (male)
+α = −0.241 (female), −0.302 (male)</pre>
+
+	<h3>Worked example</h3>
+	<p>A 55-year-old man with a serum creatinine of 1.2 mg/dL:</p>
+	<ol>
+		<li>Scr/κ = 1.2 ÷ 0.9 = 1.3333</li>
+		<li>min(1.3333, 1)^−0.302 = 1, because the smaller value is 1</li>
+		<li>max(1.3333, 1)^−1.200 = 0.7081</li>
+		<li>0.9938^55 = 0.7103</li>
+		<li>142 × 1 × 0.7081 × 0.7103 = <strong>71.4 mL/min/1.73m²</strong></li>
+	</ol>
+	<p>That result falls in <a href="/ckd-stages">category G2</a>, mildly decreased.</p>
+
+	<h2>CKD-EPI 2021 vs 2009 vs MDRD</h2>
+	<p>
+		The same blood test gives a different number depending on the equation, so compare results only
+		when they use the same one. These examples leave out the race coefficients in the original 2009
+		and MDRD equations.
+	</p>
+	<div class="table-wrap">
+		<table>
+			<caption class="sr-only">eGFR from three equations for two example patients, in mL/min/1.73m²</caption>
+			<thead>
+				<tr><th scope="col">Patient</th><th scope="col">CKD-EPI 2021</th><th scope="col">CKD-EPI 2009</th><th scope="col">MDRD</th></tr>
+			</thead>
+			<tbody>
+				<tr><th scope="row">Female, 60, Scr 1.0 mg/dL</th><td>64.5</td><td>61.2</td><td>56.6</td></tr>
+				<tr><th scope="row">Male, 55, Scr 1.2 mg/dL</th><td>71.4</td><td>67.7</td><td>62.9</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2>Why the 2021 equation dropped race</h2>
+	<p>
+		The 2009 equation multiplied the result by 1.159 for Black patients. A joint NKF and ASN task
+		force recommended removing race from GFR estimation, and the 2021 equation was refit without it.
+		Older lab reports may still show the 2009 figure.
+	</p>
+
+	<h2>When CKD-EPI creatinine is less accurate</h2>
+	<p>
+		Creatinine depends on muscle, so the estimate can mislead with very high or low muscle mass, a
+		special diet, or severe illness. KDIGO suggests adding cystatin C in those situations when the
+		result affects treatment. Our <a href="/cystatin-c-gfr-calculator">cystatin C GFR calculator</a>
+		covers both the cystatin-only and combined equations.
+	</p>
+
+	<h2>Sources</h2>
+	<ul>
+		<li>Inker LA, et al. New Creatinine- and Cystatin C&ndash;Based Equations to Estimate GFR without Race. <em>N Engl J Med</em>. 2021;385:1737&ndash;1749.</li>
+		<li>Levey AS, et al. A New Equation to Estimate Glomerular Filtration Rate. <em>Ann Intern Med</em>. 2009;150:604&ndash;612.</li>
+		<li>KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of CKD. <em>Kidney International</em>. 2024;105(4S):S117&ndash;S314.</li>
+	</ul>
+</GuidePage>

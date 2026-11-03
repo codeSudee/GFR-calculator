@@ -4,8 +4,8 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 ---
 
 <Layout
-	title="GFR Calculator Formula & Methodology — CKD-EPI, MDRD, Cockcroft-Gault"
-	description="How this GFR calculator formula works: CKD-EPI, MDRD, and Cockcroft-Gault equation sources, unit conversion approach, and the peer-reviewed research on online eGFR calculator accuracy that shaped its design."
+	title="GFR Formulas & Methodology: CKD-EPI, MDRD, Cockcroft-Gault"
+	description="The formulas behind this GFR calculator: CKD-EPI, MDRD, Cockcroft-Gault, cystatin C, and Schwartz, with constants, sources, and how we test unit conversion."
 >
 	<article class="container-page py-14 sm:py-20">
 		<div class="mx-auto max-w-2xl">
@@ -69,7 +69,7 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 						coefficient present in the 2009 equation after the NKF/ASN Task Force found it
 						systematically overestimated kidney function in Black patients.
 					</p>
-					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR = 142 &times; min(Scr/&kappa;, 1)&sup1; &times; max(Scr/&kappa;, 1)&#8315;&sup9;&sup9;&sup9;&sup9;&sup9;&sup9;&#8309;&#8309;&#8309;&#8309;&#8309;&#8309;&#8309; &times; 0.9938&#7488;&#7473;&#7468; &times; 1.012 [if female]
+					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR = 142 &times; min(Scr/&kappa;, 1)^&alpha; &times; max(Scr/&kappa;, 1)^&minus;1.200 &times; 0.9938^Age &times; 1.012 [if female]
 &kappa; = 0.7 (female) / 0.9 (male)
 &alpha; = -0.241 (female) / -0.302 (male)</pre>
 					<p class="mt-2 text-xs text-faint">Source: Inker LA, et al. N Engl J Med. 2021;385:1737-1749.</p>
@@ -83,7 +83,7 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 						This site omits that coefficient consistently with the race-free approach used across
 						every formula here — see the note below each result on the calculator.
 					</p>
-					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR = 141 &times; min(Scr/&kappa;, 1)&sup1; &times; max(Scr/&kappa;, 1)&#8315;&sup1;&#8228;&sup2;&sup0;&sup9; &times; 0.993&#7488;&#7473;&#7468; &times; 1.018 [if female]
+					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR = 141 &times; min(Scr/&kappa;, 1)^&alpha; &times; max(Scr/&kappa;, 1)^&minus;1.209 &times; 0.993^Age &times; 1.018 [if female]
 &kappa; = 0.7 (female) / 0.9 (male)
 &alpha; = -0.329 (female) / -0.411 (male)</pre>
 					<p class="mt-2 text-xs text-faint">Source: Levey AS, et al. Ann Intern Med. 2009;150:604-612.</p>
@@ -96,7 +96,7 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 						above roughly 60 mL/min/1.73m&sup2;. As with CKD-EPI 2009, this site omits the
 						original &times;1.212 Black race coefficient.
 					</p>
-					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR = 175 &times; Scr&#8315;&sup1;&#8228;&sup1;&sup5;&#8308; &times; Age&#8315;&sup0;&#8228;&sup2;&sup0;&sup3; &times; 0.742 [if female]</pre>
+					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR = 175 &times; Scr^&minus;1.154 &times; Age^&minus;0.203 &times; 0.742 [if female]</pre>
 					<p class="mt-2 text-xs text-faint">Source: Levey AS, et al. Ann Intern Med. 2006;145:247-254.</p>
 				</div>
 
@@ -109,6 +109,31 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer.astro';
 					</p>
 					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">CrCl (mL/min) = [(140 - Age) &times; Weight(kg)] / (72 &times; Scr) &times; 0.85 [if female]</pre>
 					<p class="mt-2 text-xs text-faint">Source: Cockcroft DW, Gault MH. Nephron. 1976;16:31-41.</p>
+				</div>
+
+				<div>
+					<h3 class="text-base font-semibold text-ink">CKD-EPI cystatin C (2012) and creatinine-cystatin C (2021)</h3>
+					<p class="mt-2 text-sm leading-relaxed text-body">
+						Used on the <a href="/cystatin-c-gfr-calculator" class="text-link hover:text-link-deep">cystatin C GFR calculator</a>.
+						Neither equation uses race. KDIGO suggests them when creatinine is likely to be less accurate.
+					</p>
+					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFRcys = 133 &times; min(Scys/0.8, 1)^&minus;0.499 &times; max(Scys/0.8, 1)^&minus;1.328 &times; 0.996^Age &times; 0.932 [if female]
+
+eGFRcr-cys = 135 &times; min(Scr/&kappa;, 1)^&alpha; &times; max(Scr/&kappa;, 1)^&minus;0.544 &times; min(Scys/0.8, 1)^&minus;0.323
+             &times; max(Scys/0.8, 1)^&minus;0.778 &times; 0.9961^Age &times; 0.963 [if female]
+&kappa; = 0.7 (female) / 0.9 (male)
+&alpha; = -0.219 (female) / -0.144 (male)</pre>
+					<p class="mt-2 text-xs text-faint">Sources: Inker LA, et al. N Engl J Med. 2012;367:20-29. Inker LA, et al. N Engl J Med. 2021;385:1737-1749.</p>
+				</div>
+
+				<div>
+					<h3 class="text-base font-semibold text-ink">Bedside Schwartz (children)</h3>
+					<p class="mt-2 text-sm leading-relaxed text-body">
+						Used on the <a href="/pediatric-gfr-calculator" class="text-link hover:text-link-deep">pediatric GFR calculator</a>.
+						Developed in children aged 1 to 16 with CKD, using IDMS-traceable creatinine.
+					</p>
+					<pre class="mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink">eGFR = 0.413 &times; Height (cm) / Scr (mg/dL)</pre>
+					<p class="mt-2 text-xs text-faint">Source: Schwartz GJ, et al. J Am Soc Nephrol. 2009;20:629-637.</p>
 				</div>
 			</div>
 

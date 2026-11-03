@@ -8,6 +8,8 @@ export default defineConfig({
 	// Emit /page.html so Cloudflare serves clean, slashless URLs that match canonicals and the sitemap.
 	build: { format: 'file' },
 	trailingSlash: 'never',
+	// The default compressor strips the space before an inline link at a line break ("use theCKD-EPI").
+	compressHTML: false,
 	vite: {
 		plugins: [tailwindcss()],
 	},

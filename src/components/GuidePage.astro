@@ -1,0 +1,68 @@
+---
+/** Shared shell for tool and guide pages: metadata, schema, breadcrumb, disclaimer, related links. */
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import RelatedLinks from './RelatedLinks.astro';
+import MedicalDisclaimer from './MedicalDisclaimer.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	h1: string;
+	path: string;
+	crumb: string;
+	kind: 'tool' | 'article';
+	published?: string;
+	modified: string;
+	related: string[];
+}
+
+const { title, description, h1, path, crumb, kind, published, modified, related } = Astro.props;
+const origin = 'https://gfrcalc.com';
+const org = { '@id': `${origin}/#organization` };
+const schema =
+	kind === 'tool'
+		? {
+				'@type': 'WebApplication',
+				name: crumb,
+				url: `${origin}${path}`,
+				description,
+				applicationCategory: 'HealthApplication',
+				operatingSystem: 'Any (web browser)',
+				offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+			}
+		: {
+				'@type': 'Article',
+				headline: title,
+				description,
+				mainEntityOfPage: { '@id': `${origin}${path}#webpage` },
+				dateModified: modified,
+				datePublished: published ?? modified,
+				author: org,
+				publisher: org,
+				image: `${origin}/og-image.png`,
+			};
+const updated = new Date(`${modified}T00:00:00Z`).toLocaleDateString('en-US', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+	timeZone: 'UTC',
+});
+---
+
+<Layout title={title} description={description} modified={modified} breadcrumbs={[{ name: crumb, href: path }]} schema={[schema]}>
+	<article class="container-page py-14 sm:py-20">
+		<div class="mx-auto max-w-2xl">
+			<Breadcrumbs trail={[{ name: crumb }]} />
+			<h1 class="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{h1}</h1>
+			<div class="guide">
+				<slot name="intro" />
+				<p class="note">Last updated {updated}</p>
+			</div>
+			<div class="mt-8"><slot name="tool" /></div>
+			<div class="guide"><slot /></div>
+			<div class="mt-12"><MedicalDisclaimer /></div>
+			<RelatedLinks only={related} />
+		</div>
+	</article>
+</Layout>

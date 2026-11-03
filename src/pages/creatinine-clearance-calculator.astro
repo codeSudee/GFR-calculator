@@ -1,0 +1,157 @@
+---
+import GuidePage from '../components/GuidePage.astro';
+import NumberField from '../components/NumberField.astro';
+import SexField from '../components/SexField.astro';
+
+const creatinineUnits = [
+	{ value: 'mg/dL', label: 'mg/dL' },
+	{ value: 'umol/L', label: 'µmol/L' },
+];
+---
+
+<GuidePage
+	title="Creatinine Clearance Calculator (Cockcroft-Gault Formula)"
+	description="Estimate creatinine clearance in mL/min with the Cockcroft-Gault formula. Compare actual, ideal, and adjusted body weight, and see every step of the math."
+	h1="Creatinine clearance calculator (Cockcroft-Gault)"
+	path="/creatinine-clearance-calculator"
+	crumb="Creatinine Clearance Calculator"
+	kind="tool"
+	modified="2026-11-03"
+	related={['/egfr-vs-creatinine-clearance', '/', '/ckd-epi-calculator', '/creatinine-converter']}
+>
+	<Fragment slot="intro">
+		<p>
+			Creatinine clearance (CrCl) estimates how much blood your kidneys clear of creatinine each
+			minute. The Cockcroft-Gault formula calculates it from age, sex, weight, and serum
+			creatinine, and it is still the estimate many drug-dosing references use. Add your height to
+			compare results across all three common weight choices.
+		</p>
+	</Fragment>
+
+	<div slot="tool" class="rounded-lg border border-hairline bg-canvas-elevated p-4 sm:p-6">
+		<form id="crcl-form" class="grid gap-5 sm:grid-cols-2" novalidate>
+			<NumberField id="creatinine" label="Serum creatinine" placeholder="1.00" unitOptions={creatinineUnits} unitName="creatinine-unit" wide />
+			<NumberField id="age" label="Age" placeholder="60" step="1" unit="years" />
+			<SexField />
+			<NumberField id="weight" label="Actual body weight" placeholder="70" unit="kg" />
+			<NumberField id="height" label="Height (optional)" placeholder="170" unit="cm" required={false} hint="Needed for ideal and adjusted weight. Devine ideal weight applies from 152.4 cm (5 ft)." />
+			<div class="sm:col-span-2">
+				<button type="submit" class="w-full rounded-pill bg-ink px-6 py-2.5 text-sm font-medium text-canvas transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link sm:w-auto">
+					Calculate creatinine clearance
+				</button>
+			</div>
+		</form>
+		<div id="result-region" aria-live="polite"></div>
+	</div>
+
+	<h2>The Cockcroft-Gault formula</h2>
+	<pre>CrCl (mL/min) = [(140 − Age) × Weight (kg)] / (72 × Scr (mg/dL))
+Multiply by 0.85 if female
+
+With creatinine in µmol/L:
+CrCl (mL/min) = [(140 − Age) × Weight (kg) × 1.23] / Scr (µmol/L)    male
+CrCl (mL/min) = [(140 − Age) × Weight (kg) × 1.04] / Scr (µmol/L)    female</pre>
+
+	<h3>Worked example</h3>
+	<p>
+		A 60-year-old man weighing 80 kg with a serum creatinine of 1.2 mg/dL:
+		(140 − 60) × 80 = 6,400, and 72 × 1.2 = 86.4. Dividing gives a creatinine clearance of
+		<strong>74 mL/min</strong>. A woman with the same numbers would be 74.1 × 0.85 =
+		<strong>63 mL/min</strong>.
+	</p>
+
+	<h2>Which body weight should you use?</h2>
+	<p>
+		The original 1976 study used actual body weight, but it can overestimate clearance in people
+		with obesity. Drug references and hospitals differ on which weight to use, so check the drug
+		label or your local policy. This calculator shows all three rather than choosing for you.
+	</p>
+	<div class="table-wrap">
+		<table>
+			<caption class="sr-only">Body weight options for Cockcroft-Gault</caption>
+			<thead><tr><th scope="col">Weight</th><th scope="col">How it is calculated</th></tr></thead>
+			<tbody>
+				<tr><th scope="row">Actual</th><td>Measured body weight</td></tr>
+				<tr><th scope="row">Ideal (Devine)</th><td>Male: 50 kg + 2.3 kg per inch over 5 ft. Female: 45.5 kg + 2.3 kg per inch over 5 ft.</td></tr>
+				<tr><th scope="row">Adjusted</th><td>Ideal + 0.4 × (actual − ideal)</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2>What is a normal creatinine clearance?</h2>
+	<p>
+		MedlinePlus lists a normal range of 97 to 137 mL/min for men and 88 to 128 mL/min for women.
+		Normal values fall with age and vary slightly between labs, so your own result needs to be read
+		by a clinician who knows your history.
+	</p>
+
+	<h2>Creatinine clearance vs eGFR</h2>
+	<p>
+		The two numbers answer different questions and use different units. CrCl is in mL/min and
+		reflects your actual body size. eGFR is in mL/min/1.73m² and is scaled to a standard body size,
+		which makes it the one used for <a href="/ckd-stages">CKD staging</a>. To get an eGFR, use the
+		<a href="/ckd-epi-calculator">CKD-EPI calculator</a>, and see
+		<a href="/egfr-vs-creatinine-clearance">eGFR vs creatinine clearance</a> for the full comparison.
+	</p>
+
+	<h2>When this estimate is less reliable</h2>
+	<ul>
+		<li>Kidney function that is changing quickly, such as acute kidney injury, because the formula assumes stable creatinine.</li>
+		<li>Very high or very low muscle mass, since creatinine comes from muscle.</li>
+		<li>Pregnancy, and people under 18. For children, use the <a href="/pediatric-gfr-calculator">pediatric GFR calculator</a>.</li>
+	</ul>
+	<p>Do not change a medicine dose based on this page. Ask your prescriber or pharmacist.</p>
+
+	<h2>Sources</h2>
+	<ul>
+		<li>Cockcroft DW, Gault MH. Prediction of creatinine clearance from serum creatinine. <em>Nephron</em>. 1976;16:31&ndash;41.</li>
+		<li><a href="https://medlineplus.gov/ency/article/003611.htm" target="_blank" rel="noopener noreferrer">MedlinePlus: Creatinine clearance tests</a>.</li>
+		<li>Devine BJ. Gentamicin therapy. <em>Drug Intell Clin Pharm</em>. 1974;8:650&ndash;655.</li>
+	</ul>
+</GuidePage>
+
+<script>
+	import {
+		adjustedBodyWeightKg,
+		calculateCockcroftGault,
+		idealBodyWeightKg,
+		type CreatinineUnit,
+		type Sex,
+	} from '../lib/gfr';
+	import { readChoice, readNumber, resultHtml } from '../lib/result-html';
+
+	const form = document.getElementById('crcl-form');
+	const region = document.getElementById('result-region');
+
+	form?.addEventListener('submit', (e) => {
+		e.preventDefault();
+		if (!region) return;
+		const creatinine = readNumber('creatinine', 0.01, 3000, 'Enter a creatinine value greater than 0.');
+		const age = readNumber('age', 18, 120, 'This formula is for adults. Enter an age between 18 and 120.');
+		const weightKg = readNumber('weight', 1, 500, 'Enter a body weight greater than 0.');
+		if (creatinine === null || age === null || weightKg === null) {
+			region.innerHTML = '';
+			return;
+		}
+		const creatinineUnit = readChoice<CreatinineUnit>('creatinine-unit');
+		const sex = readChoice<Sex>('sex');
+		const crcl = (kg: number) => calculateCockcroftGault({ creatinine, creatinineUnit, age, sex, weightKg: kg }).egfr;
+
+		const heightCm = Number((document.getElementById('height') as HTMLInputElement).value);
+		const ideal = heightCm > 0 ? idealBodyWeightKg(heightCm, sex) : null;
+		let comparison = '';
+		if (ideal !== null) {
+			const adjusted = adjustedBodyWeightKg(weightKg, ideal);
+			const rows: [string, number][] = [['Actual', weightKg], ['Ideal', ideal], ['Adjusted', adjusted]];
+			comparison = `<table class="mt-4 w-full text-left text-sm">
+				<caption class="sr-only">Creatinine clearance by body weight</caption>
+				<thead><tr class="border-b border-hairline"><th scope="col" class="py-2 font-medium text-ink">Weight used</th><th scope="col" class="py-2 font-medium text-ink">kg</th><th scope="col" class="py-2 font-medium text-ink">CrCl (mL/min)</th></tr></thead>
+				<tbody>${rows
+					.map(([name, kg]) => `<tr class="border-b border-hairline-soft"><th scope="row" class="py-2 font-normal text-body">${name}</th><td class="py-2 text-body">${kg.toFixed(1)}</td><td class="py-2 font-medium text-ink">${crcl(kg)}</td></tr>`)
+					.join('')}</tbody>
+			</table>`;
+		}
+		region.innerHTML = resultHtml(calculateCockcroftGault({ creatinine, creatinineUnit, age, sex, weightKg }), comparison);
+		region.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+	});
+</script>

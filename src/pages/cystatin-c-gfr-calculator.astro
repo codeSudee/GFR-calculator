@@ -1,0 +1,132 @@
+---
+import GuidePage from '../components/GuidePage.astro';
+import NumberField from '../components/NumberField.astro';
+import SexField from '../components/SexField.astro';
+
+const creatinineUnits = [
+	{ value: 'mg/dL', label: 'mg/dL' },
+	{ value: 'umol/L', label: 'µmol/L' },
+];
+---
+
+<GuidePage
+	title="Cystatin C GFR Calculator: eGFRcys and eGFRcr-cys"
+	description="Calculate eGFR from cystatin C with the CKD-EPI 2012 equation, or combine it with creatinine using CKD-EPI 2021. Free, with every step of the math shown."
+	h1="Cystatin C GFR calculator"
+	path="/cystatin-c-gfr-calculator"
+	crumb="Cystatin C GFR Calculator"
+	kind="tool"
+	modified="2026-11-03"
+	related={['/ckd-epi-calculator', '/egfr-blood-test', '/ckd-stages', '/methodology']}
+>
+	<Fragment slot="intro">
+		<p>
+			Cystatin C is a blood marker of kidney function that depends much less on muscle mass than
+			creatinine does. Enter cystatin C alone to get eGFRcys. Add creatinine too and you also get
+			eGFRcr-cys, the combined estimate KDIGO suggests when more precision is needed.
+		</p>
+	</Fragment>
+
+	<div slot="tool" class="rounded-lg border border-hairline bg-canvas-elevated p-4 sm:p-6">
+		<form id="cys-form" class="grid gap-5 sm:grid-cols-2" novalidate>
+			<NumberField id="cystatin" label="Serum cystatin C" placeholder="1.00" unit="mg/L" wide />
+			<NumberField id="age" label="Age" placeholder="60" step="1" unit="years" />
+			<SexField />
+			<NumberField id="creatinine" label="Serum creatinine (optional)" placeholder="1.00" unitOptions={creatinineUnits} unitName="creatinine-unit" required={false} wide hint="Add this to get the combined eGFRcr-cys result as well." />
+			<div class="sm:col-span-2">
+				<button type="submit" class="w-full rounded-pill bg-ink px-6 py-2.5 text-sm font-medium text-canvas transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link sm:w-auto">
+					Calculate eGFR
+				</button>
+			</div>
+		</form>
+		<div id="result-region" aria-live="polite"></div>
+	</div>
+
+	<h2>The equations</h2>
+	<h3>CKD-EPI 2012 cystatin C (eGFRcys)</h3>
+	<pre>eGFRcys = 133 × min(Scys/0.8, 1)^−0.499 × max(Scys/0.8, 1)^−1.328 × 0.996^Age × 0.932 [if female]</pre>
+	<h3>CKD-EPI 2021 creatinine-cystatin C (eGFRcr-cys)</h3>
+	<pre>eGFRcr-cys = 135 × min(Scr/κ, 1)^α × max(Scr/κ, 1)^−0.544
+             × min(Scys/0.8, 1)^−0.323 × max(Scys/0.8, 1)^−0.778
+             × 0.9961^Age × 0.963 [if female]
+
+κ = 0.7 (female), 0.9 (male)
+α = −0.219 (female), −0.144 (male)</pre>
+
+	<h2>When is cystatin C used?</h2>
+	<p>
+		KDIGO still recommends starting with creatinine-based eGFR for adults at risk of CKD. It proposes
+		measuring cystatin C when creatinine is likely to be less accurate and the GFR result affects a
+		decision. Common examples are:
+	</p>
+	<ul>
+		<li>Muscle wasting or unusually low or high muscle mass</li>
+		<li>Special diets</li>
+		<li>Severe illness</li>
+		<li>Treatment decisions that depend on GFR, such as drug dosing</li>
+	</ul>
+
+	<h2>Why eGFRcys and eGFRcr can disagree</h2>
+	<p>
+		Creatinine and cystatin C are each affected by things other than kidney function, so the two
+		estimates do not always match. If the gap would change your care, a clinician may order a
+		measured GFR. Cystatin C can be affected by thyroid problems, steroid use, smoking, obesity, and
+		inflammation, which is one reason the combined equation is usually preferred over either marker
+		alone.
+	</p>
+
+	<h2>Reading your result</h2>
+	<p>
+		eGFRcys and eGFRcr-cys are reported in mL/min/1.73m² and use the same
+		<a href="/ckd-stages">G1 to G5 categories</a> as creatinine-based eGFR. See
+		<a href="/egfr-results">what your eGFR number means</a> for each range. Labs report cystatin C in
+		mg/L, and this calculator expects a standardized assay.
+	</p>
+
+	<h2>Sources</h2>
+	<ul>
+		<li>Inker LA, et al. Estimating Glomerular Filtration Rate from Serum Creatinine and Cystatin C. <em>N Engl J Med</em>. 2012;367:20&ndash;29.</li>
+		<li>Inker LA, et al. New Creatinine- and Cystatin C&ndash;Based Equations to Estimate GFR without Race. <em>N Engl J Med</em>. 2021;385:1737&ndash;1749.</li>
+		<li><a href="https://www.kidney.org/ckd-epi-creatinine-cystatin-equation-2021" target="_blank" rel="noopener noreferrer">National Kidney Foundation: CKD-EPI Creatinine-Cystatin Equation (2021)</a>.</li>
+		<li>KDIGO 2024 Clinical Practice Guideline for the Evaluation and Management of CKD. <em>Kidney International</em>. 2024;105(4S):S117&ndash;S314.</li>
+	</ul>
+</GuidePage>
+
+<script>
+	import {
+		calculateCkdEpiCrCys2021,
+		calculateCkdEpiCystatin2012,
+		type CreatinineUnit,
+		type Sex,
+	} from '../lib/gfr';
+	import { readChoice, readNumber, resultHtml } from '../lib/result-html';
+
+	const form = document.getElementById('cys-form');
+	const region = document.getElementById('result-region');
+
+	form?.addEventListener('submit', (e) => {
+		e.preventDefault();
+		if (!region) return;
+		const cystatinC = readNumber('cystatin', 0.01, 50, 'Enter a cystatin C value greater than 0.');
+		const age = readNumber('age', 18, 120, 'These equations are for adults. Enter an age between 18 and 120.');
+		const creatinineEntered = Boolean((document.getElementById('creatinine') as HTMLInputElement).value);
+		const creatinine = creatinineEntered ? readNumber('creatinine', 0.01, 3000, 'Enter a creatinine value greater than 0.') : null;
+		if (cystatinC === null || age === null || (creatinineEntered && creatinine === null)) {
+			region.innerHTML = '';
+			return;
+		}
+		if (!creatinineEntered) {
+			const creatinineError = document.getElementById('creatinine-error');
+			if (creatinineError) creatinineError.textContent = '';
+		}
+		const sex = readChoice<Sex>('sex');
+		let html = '';
+		if (creatinine !== null) {
+			const creatinineUnit = readChoice<CreatinineUnit>('creatinine-unit');
+			html += resultHtml(calculateCkdEpiCrCys2021({ creatinine, creatinineUnit, cystatinC, age, sex }));
+		}
+		html += resultHtml(calculateCkdEpiCystatin2012({ cystatinC, age, sex }));
+		region.innerHTML = html;
+		region.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+	});
+</script>
