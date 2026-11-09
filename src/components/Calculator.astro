@@ -9,7 +9,7 @@ const { initialFormula = 'ckd-epi-2021' } = Astro.props;
 const formulaOrder = ['ckd-epi-2021', 'ckd-epi-2009', 'mdrd', 'cockcroft-gault'] as const;
 ---
 
-<div class="rounded-lg border border-hairline bg-canvas-elevated shadow-[0_1px_1px_rgba(0,0,0,0.04)]">
+<div class="rounded-lg border border-hairline bg-canvas-elevated ">
 	<!-- Formula tabs -->
 	<div class="border-b border-hairline px-2 pt-2 sm:px-4">
 		<div role="tablist" aria-label="GFR formula" class="flex flex-wrap gap-1">
@@ -155,7 +155,7 @@ const formulaOrder = ['ckd-epi-2021', 'ckd-epi-2009', 'mdrd', 'cockcroft-gault']
 			<div class="sm:col-span-2">
 				<button
 					type="submit"
-					class="w-full rounded-pill bg-ink px-6 py-2.5 text-sm font-medium text-canvas transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link sm:w-auto"
+					class="w-full rounded-pill bg-link px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-link-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link sm:w-auto"
 				>
 					Calculate eGFR
 				</button>

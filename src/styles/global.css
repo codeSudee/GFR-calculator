@@ -1,92 +1,56 @@
 @import "tailwindcss";
 
-/* Manual dark mode: toggled by adding/removing `.dark` on <html> (see ThemeToggle script). */
-@custom-variant dark (&:where(.dark, .dark *));
-
 @theme {
-  /* Colors — Geist-inspired ink/canvas system */
-  --color-ink: #171717;
-  --color-body: #4d4d4d;
-  --color-mute: #8f8f8f;
-  --color-faint: #a1a1a1;
-  --color-hairline: #ebebeb;
-  --color-hairline-soft: #f2f2f2;
-  --color-canvas: #fafafa;
+  /* Colors — Oura-inspired warm-paper system (see DESIGN.md). Token names are
+     kept stable so components repaint without markup changes. */
+  --color-ink: #1c1b1a;
+  --color-body: #4a4741; /* stone */
+  --color-mute: #6f6c67;
+  --color-faint: #838280; /* ash */
+  --color-hairline: #e1dcd3;
+  --color-hairline-soft: #efe8dc;
+  --color-canvas: #f7f1e8;
   --color-canvas-elevated: #ffffff;
-  --color-link: #0070f3;
-  --color-link-deep: #0761d1;
-  --color-link-soft: #d3e5ff;
-  --color-error: #ee0000;
-  --color-error-deep: #c50000;
-  --color-warning: #f5a623;
-  --color-warning-soft: #ffefcf;
-  --color-warning-deep: #ab570a;
-  --color-violet: #7928ca;
-  --color-cyan: #50e3c2;
-  --color-pink: #ff0080;
-  --color-magenta: #eb367f;
-  --color-success: #0070f3;
-  --color-success-soft: #d3e5ff;
+  --color-link: #2a72de;
+  --color-link-deep: #1f5bb8;
+  --color-link-soft: #d6e4fa;
+  --color-error: #c9301a;
+  --color-error-deep: #a32613;
+  --color-warning: #af751b; /* gold */
+  --color-warning-soft: #f3e4c3;
+  --color-warning-deep: #684d07;
+  --color-violet: #6b443d; /* clay */
+  --color-cyan: #849671; /* sage */
+  --color-pink: #bc924c; /* ochre */
+  --color-magenta: #39221e; /* espresso */
+  --color-success: #5c6f5d; /* olive */
+  --color-success-soft: #e3e8d3;
 
-  /* CKD stage semantic colors (kept low-chroma, informative not alarming) */
-  --color-stage-g1: #0070f3;
-  --color-stage-g2: #50a2e3;
-  --color-stage-g3a: #f5a623;
-  --color-stage-g3b: #e8871e;
-  --color-stage-g4: #ee6a00;
-  --color-stage-g5: #ee0000;
+  /* CKD stage semantic colors — earthy ladder, informative not alarming */
+  --color-stage-g1: #5c6f5d;
+  --color-stage-g2: #849671;
+  --color-stage-g3a: #bc924c;
+  --color-stage-g3b: #af751b;
+  --color-stage-g4: #9a4a2a;
+  --color-stage-g5: #c9301a;
 
-  /* Fonts */
-  --font-sans: "Geist", "Inter", Arial, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Fonts — open substitutes for Editorial New / Akkurat LL */
+  --font-sans: "Hanken Grotesk", "Inter", system-ui, Arial, sans-serif;
+  --font-serif: "Newsreader", "Fraunces", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Radii */
-  --radius-xs: 6px;
-  --radius-sm: 6px;
+  --radius-xs: 4px;
+  --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 16px;
+  --radius-lg: 24px;
   --radius-pill-category: 64px;
-  --radius-pill: 100px;
+  --radius-pill: 9999px;
 
-  /* Letter spacing tokens matching DESIGN.md typography scale */
-  --tracking-display: -0.05em;
-  --tracking-heading: -0.04em;
-  --tracking-subheading: -0.02em;
-}
-
-/* Dark palette — same structure/semantics as the light theme above, so every
-   component using semantic tokens (bg-canvas, text-ink, border-hairline, …)
-   repaints automatically with no markup changes. */
-.dark {
-  --color-ink: #ededed;
-  --color-body: #b4b4b4;
-  --color-mute: #8f8f8f;
-  --color-faint: #6e6e6e;
-  --color-hairline: #2e2e2e;
-  --color-hairline-soft: #1f1f1f;
-  --color-canvas: #0a0a0a;
-  --color-canvas-elevated: #141414;
-  --color-link: #3291ff;
-  --color-link-deep: #64b5ff;
-  --color-link-soft: #0d2847;
-  --color-error: #ff5f5f;
-  --color-error-deep: #ff8080;
-  --color-warning: #f7b955;
-  --color-warning-soft: #3d2c0f;
-  --color-warning-deep: #ffcf7d;
-  --color-violet: #9151d9;
-  --color-cyan: #63e9cf;
-  --color-pink: #ff4fa0;
-  --color-magenta: #f0568f;
-  --color-success: #3291ff;
-  --color-success-soft: #0d2847;
-
-  --color-stage-g1: #3291ff;
-  --color-stage-g2: #6cb3ec;
-  --color-stage-g3a: #f7b955;
-  --color-stage-g3b: #f3984a;
-  --color-stage-g4: #ff8a3d;
-  --color-stage-g5: #ff5f5f;
+  /* Tracking: Oura keeps letter-spacing at 0 */
+  --tracking-display: 0;
+  --tracking-heading: 0;
+  --tracking-subheading: 0;
 }
 
 @layer base {
@@ -94,18 +58,19 @@
     background-color: var(--color-canvas);
     color: var(--color-ink);
     color-scheme: light;
-    transition: background-color 0.15s ease, color 0.15s ease;
-  }
-
-  html.dark {
-    color-scheme: dark;
   }
 
   body {
     font-family: var(--font-sans);
     background-color: var(--color-canvas);
     color: var(--color-ink);
-    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  /* Headings: light, high-contrast serif */
+  h1, h2 {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    letter-spacing: 0;
   }
 
   h1, h2, h3, h4 {
@@ -129,19 +94,19 @@
 
 /* Long-form copy on tool and guide pages (GuidePage.astro). */
 @layer components {
-  .guide h2 { @apply mt-12 text-xl font-semibold tracking-tight text-ink; }
-  .guide h3 { @apply mt-6 text-base font-semibold text-ink; }
-  .guide p { @apply mt-4 text-base leading-relaxed text-body; }
-  .guide ul { @apply mt-4 list-disc space-y-2 pl-5 text-base leading-relaxed text-body; }
-  .guide ol { @apply mt-4 list-decimal space-y-2 pl-5 text-base leading-relaxed text-body; }
-  .guide a { @apply text-link hover:text-link-deep; }
+  .guide h2 { @apply mt-12 text-3xl font-light text-ink; }
+  .guide h3 { @apply mt-6 text-lg font-semibold text-ink; }
+  .guide p { @apply mt-4 text-[17px] leading-relaxed text-body; }
+  .guide ul { @apply mt-4 list-disc space-y-2 pl-5 text-[17px] leading-relaxed text-body; }
+  .guide ol { @apply mt-4 list-decimal space-y-2 pl-5 text-[17px] leading-relaxed text-body; }
+  .guide a { @apply text-link underline underline-offset-2 hover:text-link-deep; }
   .guide strong { @apply font-semibold text-ink; }
   .guide pre { @apply mt-3 overflow-x-auto rounded-md border border-hairline bg-hairline-soft p-3 font-mono text-xs text-ink; }
-  .guide .table-wrap { @apply mt-4 overflow-x-auto rounded-md border border-hairline; }
+  .guide .table-wrap { @apply mt-4 overflow-x-auto rounded-md border border-hairline bg-canvas-elevated; }
   .guide table { @apply w-full text-left text-sm; }
   .guide thead tr { @apply border-b border-hairline bg-hairline-soft; }
   .guide tbody tr + tr { @apply border-t border-hairline; }
-  .guide th { @apply px-4 py-2.5 font-medium text-ink; }
+  .guide th { @apply px-4 py-2.5 font-semibold text-ink; }
   .guide td { @apply px-4 py-2.5 text-body; }
   .guide .note { @apply mt-3 text-sm text-faint; }
 }

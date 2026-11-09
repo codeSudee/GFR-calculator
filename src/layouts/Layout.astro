@@ -90,18 +90,6 @@ const jsonLd = {
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<script is:inline>
-			// Runs before paint to avoid a flash of the wrong theme.
-			// Priority: saved preference > OS preference. Safe no-op if storage is blocked.
-			(function () {
-				try {
-					var stored = localStorage.getItem('theme');
-					var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-					var isDark = stored === 'dark' || (stored !== 'light' && prefersDark);
-					document.documentElement.classList.toggle('dark', isDark);
-				} catch (e) {}
-			})();
-		</script>
 		<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="shortcut icon" href="/favicon.ico" />
@@ -113,8 +101,8 @@ const jsonLd = {
 		<meta name="description" content={description} />
 		<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
 		<meta name="author" content="GFR Calculator" />
-		<meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
-		<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
+		<meta name="theme-color" content="#f7f1e8" />
+		<meta name="color-scheme" content="light" />
 
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content={canonicalURL} />
@@ -138,6 +126,12 @@ const jsonLd = {
 
 		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&display=swap"
+		/>
 		<link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
 		<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 

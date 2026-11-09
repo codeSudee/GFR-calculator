@@ -7,12 +7,12 @@ export function escapeHtml(input: string): string {
 
 function stageBadgeClasses(stage: string): string {
 	const map: Record<string, string> = {
-		G1: 'bg-link-soft text-link-deep',
-		G2: 'bg-link-soft text-link-deep',
+		G1: 'bg-success-soft text-success',
+		G2: 'bg-success-soft text-success',
 		G3a: 'bg-warning-soft text-warning-deep',
 		G3b: 'bg-warning-soft text-warning-deep',
-		G4: 'bg-[#ffe0cc] text-[#ab3a0a] dark:bg-[#3d200a] dark:text-[#ffb37d]',
-		G5: 'bg-[#ffd6d6] text-error-deep dark:bg-[#3d0f0f]',
+		G4: 'bg-[#ffe0cc] text-[#ab3a0a]',
+		G5: 'bg-[#ffd6d6] text-error-deep',
 	};
 	return map[stage] ?? 'bg-hairline-soft text-body';
 }
@@ -40,7 +40,7 @@ export function resultHtml(result: GfrResult, extraHtml = ''): string {
 		<div class="mt-6 rounded-md border border-hairline bg-canvas p-4 sm:p-5">
 			<div class="flex flex-wrap items-baseline justify-between gap-3">
 				<div>
-					<p class="text-xs font-medium uppercase tracking-wide text-mute font-mono">${escapeHtml(result.formulaName)}</p>
+					<p class="text-xs font-bold uppercase tracking-[0.08em] text-mute">${escapeHtml(result.formulaName)}</p>
 					<p class="mt-1 text-3xl font-semibold tracking-tight text-ink [font-variant-numeric:tabular-nums]">
 						${result.egfr} <span class="text-base font-normal text-body">${escapeHtml(result.unit)}</span>
 					</p>
